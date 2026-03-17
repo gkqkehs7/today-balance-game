@@ -70,7 +70,6 @@ export default function VoteButtons({
           </button>
           {voteState === 'confirmed' && (
             <div className="result-chip chip-a">
-              {percentA !== undefined && <span className="result-stat stat-a">{percentA}% · {countA?.toLocaleString()}표</span>}
             </div>
           )}
         </div>
@@ -87,7 +86,6 @@ export default function VoteButtons({
           </button>
           {voteState === 'confirmed' && (
             <div className="result-chip chip-b">
-              {percentB !== undefined && <span className="result-stat stat-b">{percentB}% · {countB?.toLocaleString()}표</span>}
             </div>
           )}
         </div>
