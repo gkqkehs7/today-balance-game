@@ -119,33 +119,39 @@ body.theme-light .date-line {
   background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 16px;
-  padding: 16px 0;
+  padding: 12px 0;
   margin-top: 12px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  width: 100%;
 }
 .stats-item {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 20px;
 }
 .stats-divider {
   width: 1px;
-  height: 40px;
+  height: 32px;
   background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
 }
 .stats-value {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: rgba(255,255,255,0.95);
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 .stats-label {
   font-size: 0.75rem;
   color: rgba(255,255,255,0.6);
   letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 body.theme-light .stats-bar {
   background: rgba(0,0,0,0.06);
