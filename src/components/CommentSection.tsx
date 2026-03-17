@@ -101,14 +101,16 @@ export default function CommentSection({
 
   const totalCount = comments.reduce((acc, c) => acc + 1 + (c.replies?.length ?? 0), 0);
 
-  // 좋아요 상위 3개 (likes >= 1) 핀 처리
-  const sorted = [...comments].sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0));
-  const pinnedIds = new Set(
-    sorted.filter(c => (c.likes ?? 0) >= 1).slice(0, 3).map(c => c._id)
-  );
-  const pinned = sorted.filter(c => pinnedIds.has(c._id));
-  const rest = comments.filter(c => !pinnedIds.has(c._id));
-  const orderedComments = [...pinned, ...rest];
+  // 좋아요 + 싫어요 합계가 가장 많은 댓글 1개 핀 처리
+  const hotComment = comments.reduce<IComment | null>((best, c) => {
+    const score = (c.likes ?? 0) + (c.dislikes ?? 0);
+    const bestScore = best ? (best.likes ?? 0) + (best.dislikes ?? 0) : 0;
+    return score > 0 && score > bestScore ? c : best;
+  }, null);
+  const pinnedId = hotComment?._id ?? null;
+  const orderedComments = pinnedId
+    ? [comments.find(c => c._id === pinnedId)!, ...comments.filter(c => c._id !== pinnedId)]
+    : comments;
 
   return (
     <div className="comment-section">
@@ -156,7 +158,7 @@ export default function CommentSection({
                 optionA={optionA}
                 optionB={optionB}
                 isMock={isMock}
-                pinned={pinnedIds.has(comment._id)}
+                pinned={comment._id === pinnedId}
                 onReply={loadComments}
                 formatTime={formatTime}
               />
