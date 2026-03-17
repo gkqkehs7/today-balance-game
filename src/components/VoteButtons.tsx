@@ -68,10 +68,6 @@ export default function VoteButtons({
           >
             <span className="vote-option">{optionA}</span>
           </button>
-          {voteState === 'confirmed' && (
-            <div className="result-chip chip-a">
-            </div>
-          )}
         </div>
 
         <span className="vs-divider">VS</span>
@@ -84,10 +80,6 @@ export default function VoteButtons({
           >
             <span className="vote-option">{optionB}</span>
           </button>
-          {voteState === 'confirmed' && (
-            <div className="result-chip chip-b">
-            </div>
-          )}
         </div>
       </div>
 

@@ -522,7 +522,7 @@ body.theme-light .stat-b { color: rgba(200,50,50,0.85); }
 
 .result-split-bar {
   display: flex;
-  height: 36px;
+  height: 26px;
   border-radius: 10px;
   overflow: hidden;
   margin-top: 12px;
