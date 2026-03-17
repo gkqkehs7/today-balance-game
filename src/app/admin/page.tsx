@@ -93,11 +93,12 @@ export default function AdminPage() {
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': adminSecret },
         body: JSON.stringify(editFields),
       });
-      if (!res.ok) { const d = await res.json(); alert(d.error); return; }
+      const d = await res.json();
+      if (!res.ok) { alert(`오류 (${res.status}): ${d.error}`); return; }
       setEditingId(null);
       await loadQuestions();
-    } catch {
-      alert('서버 오류');
+    } catch (err) {
+      alert(`서버 오류: ${err}`);
     }
   }
 
