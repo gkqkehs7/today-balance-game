@@ -61,6 +61,7 @@ export default function GameCard({ initialQuestion }: GameCardProps) {
     if (!pendingChoice) return;
     const choice = pendingChoice;
     setPendingChoice(null);
+    setVoteState('loading');
 
     const voteKey = isMock ? `vote_mock_${getTodayKey()}` : `vote_${getTodayKey()}`;
 
@@ -99,6 +100,15 @@ export default function GameCard({ initialQuestion }: GameCardProps) {
       setPendingChoice(choice);
       setVoteState('pending');
     }
+  }
+
+  if (voteState === 'loading') {
+    return (
+      <div className="vote-loading-overlay">
+        <div className="vote-loading-spinner" />
+        <p>집계 중...</p>
+      </div>
+    );
   }
 
   return (

@@ -42,7 +42,7 @@ export default async function Home() {
             <span>{questionNumber}</span>
           </div>
           <h1>오늘의 밸런스 게임</h1>
-          <p className="subtitle">지금 사람들은 어느 쪽일까요?</p>
+          <p className="subtitle">당신의 선택은?</p>
           <VoteCountdown />
         </header>
 

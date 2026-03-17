@@ -30,4 +30,4 @@ export interface IComment {
 export type WeatherType = 'clear' | 'clouds' | 'rain' | 'snow' | 'mist' | 'heat' | 'thunder';
 export type TimePhase = 'dawn' | 'day' | 'dusk' | 'night';
 export type VoteChoice = 'A' | 'B';
-export type VoteState = 'idle' | 'pending' | 'confirmed';
+export type VoteState = 'idle' | 'pending' | 'loading' | 'confirmed';
