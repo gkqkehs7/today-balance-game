@@ -28,11 +28,11 @@ export default function Home() {
           <VoteCountdown />
         </header>
 
-        <StatsBar />
-
         <Suspense fallback={<GameCardSkeleton />}>
           <GameCardLoader />
         </Suspense>
+
+        <StatsBar />
       </div>
     </WeatherCanvas>
   );
