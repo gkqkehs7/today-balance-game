@@ -6,7 +6,7 @@ import GameCard from '@/components/GameCard';
 async function getTodayQuestion(): Promise<IQuestion | null> {
   try {
     await connectDB();
-    const today = new Date().toISOString().slice(0, 10);
+    const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
     let question = await Question.findOne({ date: today }).lean();
     if (!question) {
       question = await Question.findOne({ date: { $lte: today } }).sort({ date: -1 }).lean();

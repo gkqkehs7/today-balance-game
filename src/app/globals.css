@@ -798,6 +798,11 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
   padding: 4px 10px;
   border-radius: 6px;
   letter-spacing: 0.02em;
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 .choice-badge.A {
   background: #3C78E6;
@@ -1242,4 +1247,6 @@ body.theme-light .loading-text { color: rgba(18,24,38,0.7); text-shadow: none; }
   .reply-input-wrap { gap: 5px; padding: 5px 7px; }
   .reply-input-wrap button { padding: 4px 10px; }
   .reply-input-wrap .my-team-badge { max-width: 64px; }
+
+  .choice-badge { max-width: 90px; }
 }
