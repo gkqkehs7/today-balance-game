@@ -497,6 +497,33 @@ body.theme-light .result-split-bar { background: rgba(0,0,0,0.08); }
 /* ===================== 댓글 섹션 ===================== */
 .comment-section { width: 100%; }
 
+.load-more-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.load-more-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.4);
+}
+body.theme-light .load-more-btn {
+  border-color: rgba(0,0,0,0.15);
+  color: rgba(0,0,0,0.5);
+}
+body.theme-light .load-more-btn:hover {
+  background: rgba(0,0,0,0.05);
+  color: rgba(0,0,0,0.8);
+}
+
 .comment-title {
   font-family: 'Noto Serif KR', serif;
   font-size: 1.05rem;

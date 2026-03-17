@@ -32,6 +32,7 @@ export default function CommentSection({
   const [comments, setComments] = useState<IComment[]>(initialComments ?? []);
   const [commentText, setCommentText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   async function loadComments() {
     try {
@@ -135,19 +136,29 @@ export default function CommentSection({
         ) : comments.length === 0 ? (
           <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>아직 댓글이 없습니다. 첫 댓글을 남겨보세요!</p>
         ) : (
-          comments.map(comment => (
-            <CommentItem
-              key={comment._id}
-              comment={comment}
-              questionId={questionId}
-              myChoice={myChoice}
-              optionA={optionA}
-              optionB={optionB}
-              isMock={isMock}
-              onReply={loadComments}
-              formatTime={formatTime}
-            />
-          ))
+          <>
+            {comments.slice(0, visibleCount).map(comment => (
+              <CommentItem
+                key={comment._id}
+                comment={comment}
+                questionId={questionId}
+                myChoice={myChoice}
+                optionA={optionA}
+                optionB={optionB}
+                isMock={isMock}
+                onReply={loadComments}
+                formatTime={formatTime}
+              />
+            ))}
+            {visibleCount < comments.length && (
+              <button
+                className="load-more-btn"
+                onClick={() => setVisibleCount(v => v + 5)}
+              >
+                댓글 더보기 ({comments.length - visibleCount}개 남음)
+              </button>
+            )}
+          </>
         )}
       </div>
     </div>
