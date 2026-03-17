@@ -22,10 +22,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
     let animFrameId: number | null = null;
     let sceneTime = 0;
     let stars: { x: number; y: number; r: number; twinkle: number; speed: number }[] | null = null;
-    let moonImg: HTMLImageElement | null = null;
-    const moonImgEl = new Image();
-    moonImgEl.src = '/images/moon.png';
-    moonImgEl.onload = () => { moonImg = moonImgEl; };
 
     const currentTimePhase: TimePhase = timePhase;
 
@@ -101,13 +97,15 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         drawGlow(mx, my, 120, 'rgba(200,200,160,__A__)', 0.06);
       }
 
-      if (currentTimePhase === 'dusk' && moonImg) {
-        const size = 64;
-        const mx = W * 0.2 - size / 2;
-        const my = H * 0.08;
+      if (currentTimePhase === 'dusk') {
+        const mx = W * 0.2, my = H * 0.1;
         ctx!.save();
-        ctx!.globalAlpha = 0.88;
-        ctx!.drawImage(moonImg, mx, my, size, size);
+        ctx!.fillStyle = 'rgba(240,235,210,0.85)';
+        ctx!.shadowColor = 'rgba(220,215,180,0.5)';
+        ctx!.shadowBlur = 24;
+        ctx!.beginPath();
+        ctx!.arc(mx, my, 22, 0, Math.PI * 2);
+        ctx!.fill();
         ctx!.restore();
       }
 
