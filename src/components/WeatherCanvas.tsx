@@ -99,18 +99,19 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
 
       if (currentTimePhase === 'dusk') {
         // 저녁 초승달
-        const mx = W * 0.2, my = H * 0.12;
+        const mx = W * 0.2, my = H * 0.1;
         ctx!.save();
-        ctx!.fillStyle = 'rgba(240,230,190,0.7)';
-        ctx!.shadowColor = 'rgba(220,210,160,0.4)';
-        ctx!.shadowBlur = 18;
+        ctx!.fillStyle = 'rgba(240,230,190,0.82)';
+        ctx!.shadowColor = 'rgba(230,215,160,0.6)';
+        ctx!.shadowBlur = 22;
         ctx!.beginPath();
-        ctx!.arc(mx, my, 16, 0, Math.PI * 2);
+        ctx!.arc(mx, my, 20, 0, Math.PI * 2);
         ctx!.fill();
-        ctx!.fillStyle = 'rgba(100,50,80,0.75)'; // dusk sky color to cut crescent
+        // dusk 하늘 최상단 색으로 잘라서 초승달 모양
+        ctx!.fillStyle = 'rgb(18, 12, 40)';
         ctx!.shadowBlur = 0;
         ctx!.beginPath();
-        ctx!.arc(mx + 7, my - 2, 14, 0, Math.PI * 2);
+        ctx!.arc(mx + 10, my - 2, 17, 0, Math.PI * 2);
         ctx!.fill();
         ctx!.restore();
       }
