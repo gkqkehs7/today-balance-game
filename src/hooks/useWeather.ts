@@ -18,8 +18,9 @@ function getTimePhase(): TimePhase {
 }
 
 function isLightBackground(type: WeatherType, phase: TimePhase): boolean {
+  if (type === 'snow') return phase !== 'night';
   if (phase === 'night' || phase === 'dusk') return false;
-  return ['clear', 'snow', 'mist'].includes(type) && phase === 'day';
+  return ['clear', 'mist', 'clouds'].includes(type) && phase === 'day';
 }
 
 function classifyWeather(id: number, temp: number): WeatherType {
@@ -52,12 +53,21 @@ const SEOUL_LAT = 37.5665;
 const SEOUL_LON = 126.9780;
 
 export function useWeather(): UseWeatherReturn {
-  const [weatherType, setWeatherType] = useState<WeatherType>('clear');
-  const [timePhase, setTimePhase] = useState<TimePhase>('day');
+  const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const forceWeather = params?.get('weather') as WeatherType | null;
+  const forceTime = params?.get('time') as TimePhase | null;
+
+  const [weatherType, setWeatherType] = useState<WeatherType>(forceWeather || 'clear');
+  const [timePhase, setTimePhase] = useState<TimePhase>(forceTime || 'day');
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const phase = getTimePhase();
+    if (forceWeather && forceTime) {
+      applyBodyClasses(forceWeather, forceTime);
+      setReady(true);
+      return;
+    }
+    const phase = forceTime || getTimePhase();
     setTimePhase(phase);
 
     const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_KEY;

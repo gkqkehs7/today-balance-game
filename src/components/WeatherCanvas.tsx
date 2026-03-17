@@ -22,6 +22,8 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
     let animFrameId: number | null = null;
     let sceneTime = 0;
     let stars: { x: number; y: number; r: number; twinkle: number; speed: number }[] | null = null;
+    let sceneGroundRatio = 0.80; // 각 scene이 설정하는 ground 위치 비율
+    let sceneIsSnow = false;
 
     const currentTimePhase: TimePhase = timePhase;
 
@@ -100,14 +102,16 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
       if (currentTimePhase === 'dawn' || currentTimePhase === 'dusk') {
         const isDawn = currentTimePhase === 'dawn';
         const hx = isDawn ? W * 0.25 : W * 0.75;
-        const groundY = H * 0.80;
+        const groundY = H * sceneGroundRatio;
         const sunR = Math.min(W, H) * 0.065;
 
-        // 지는/뜨는 태양 — 지평선에 반만 걸쳐 있음
+        // 지는/뜨는 태양 — 눈 scene은 ground가 덮으므로 클립 없이, 나머지는 반원 클립
         ctx!.save();
-        ctx!.beginPath();
-        ctx!.rect(0, 0, W, groundY);
-        ctx!.clip();
+        if (!sceneIsSnow) {
+          ctx!.beginPath();
+          ctx!.rect(0, 0, W, groundY);
+          ctx!.clip();
+        }
         ctx!.shadowColor = isDawn ? '#ffcc44' : '#ff5500';
         ctx!.shadowBlur = 50;
         ctx!.fillStyle = isDawn ? 'rgba(255,200,80,0.92)' : 'rgba(255,110,30,0.92)';
@@ -180,26 +184,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
       ctx!.restore();
     }
 
-    function drawTree(x: number, y: number, scale: number, alpha: number) {
-      ctx!.save();
-      ctx!.globalAlpha = alpha;
-      ctx!.fillStyle = '#000';
-      ctx!.strokeStyle = '#000';
-      const s = scale;
-
-      ctx!.fillRect(x - s * 4, y - s * 30, s * 8, s * 30);
-
-      for (let i = 0; i < 3; i++) {
-        ctx!.beginPath();
-        const cy = y - s * 30 - i * s * 22;
-        ctx!.moveTo(x, cy - s * 28);
-        ctx!.lineTo(x - s * (18 - i * 2), cy);
-        ctx!.lineTo(x + s * (18 - i * 2), cy);
-        ctx!.closePath();
-        ctx!.fill();
-      }
-      ctx!.restore();
-    }
 
     function drawBareTree(x: number, y: number, scale: number, alpha: number) {
       ctx!.save();
@@ -273,32 +257,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
       ctx!.restore();
     }
 
-    function drawLamppost(x: number, y: number, scale: number, alpha: number) {
-      ctx!.save();
-      ctx!.globalAlpha = alpha;
-      ctx!.strokeStyle = 'rgba(20,20,30,0.8)';
-      ctx!.fillStyle = 'rgba(20,20,30,0.8)';
-      const s = scale;
-
-      ctx!.lineWidth = s * 3;
-      ctx!.beginPath();
-      ctx!.moveTo(x, y);
-      ctx!.lineTo(x, y - s * 70);
-      ctx!.stroke();
-
-      ctx!.lineWidth = s * 2;
-      ctx!.beginPath();
-      ctx!.moveTo(x, y - s * 70);
-      ctx!.quadraticCurveTo(x, y - s * 85, x + s * 18, y - s * 85);
-      ctx!.stroke();
-
-      ctx!.fillStyle = 'rgba(255,240,180,0.6)';
-      ctx!.beginPath();
-      ctx!.arc(x + s * 18, y - s * 85, s * 4, 0, Math.PI * 2);
-      ctx!.fill();
-
-      ctx!.restore();
-    }
 
     function drawRoundTree(x: number, y: number, scale: number, alpha: number) {
       ctx!.save();
@@ -351,23 +309,21 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
 
     function sceneRain() {
       particles = makeRaindrops(180);
+      sceneGroundRatio = 0.83;
       const W = canvas!.width, H = canvas!.height;
 
-      const people = [
-        { x: W * 0.15, scale: 0.55, alpha: 0.28 },
-        { x: W * 0.78, scale: 0.55, alpha: 0.28 },
-        { x: W * 0.42, scale: 0.78, alpha: 0.38 },
-        { x: W * 0.90, scale: 0.85, alpha: 0.42 },
-        { x: W * 0.06, scale: 0.85, alpha: 0.42 },
-      ];
-      const lamps = [
-        { x: W * 0.28, scale: 0.7, alpha: 0.3 },
-        { x: W * 0.70, scale: 0.7, alpha: 0.3 },
-      ];
       const groundY = H * 0.83;
+      const trees = [
+        { x: W * 0.06, scale: 0.65, alpha: 0.28 },
+        { x: W * 0.15, scale: 0.85, alpha: 0.33 },
+        { x: W * 0.82, scale: 0.8, alpha: 0.32 },
+        { x: W * 0.93, scale: 0.6, alpha: 0.25 },
+      ];
 
       function draw() {
         ctx!.clearRect(0, 0, W, H);
+        sceneTime++;
+        drawNightOverlay();
 
         const grd = ctx!.createLinearGradient(0, groundY, 0, H);
         grd.addColorStop(0, 'rgba(20,35,50,0.55)');
@@ -375,9 +331,7 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         ctx!.fillStyle = grd;
         ctx!.fillRect(0, groundY, W, H - groundY);
 
-        for (const l of lamps) drawLamppost(l.x, groundY, l.scale, l.alpha);
-        for (const l of lamps) drawGlow(l.x + l.scale * 18, groundY - l.scale * 85, 60 * l.scale, 'rgba(255,240,160,__A__)', 0.08);
-        for (const p of people) drawPersonUmbrella(p.x, groundY, p.scale, p.alpha);
+        for (const t of trees) drawRoundTree(t.x, groundY, t.scale, t.alpha);
 
         ctx!.save();
         ctx!.strokeStyle = 'rgba(174,214,241,0.45)';
@@ -392,21 +346,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         }
         ctx!.restore();
 
-        sceneTime++;
-        if (sceneTime % 8 === 0) {
-          for (const p of people) {
-            ctx!.save();
-            ctx!.globalAlpha = 0.1 + Math.random() * 0.08;
-            ctx!.strokeStyle = 'rgba(150,200,255,0.6)';
-            ctx!.lineWidth = 0.8;
-            ctx!.beginPath();
-            ctx!.ellipse(p.x, groundY + 3, 8 * p.scale, 2.5 * p.scale, 0, 0, Math.PI * 2);
-            ctx!.stroke();
-            ctx!.restore();
-          }
-        }
-
-        drawNightOverlay();
         animFrameId = requestAnimationFrame(draw);
       }
       draw();
@@ -414,6 +353,7 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
 
     function sceneThunder() {
       particles = makeRaindrops(230);
+      sceneGroundRatio = 0.83;
       const W = canvas!.width, H = canvas!.height;
       const groundY = H * 0.83;
       let lightningCooldown = 200;
@@ -438,6 +378,8 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
 
       function draw() {
         ctx!.clearRect(0, 0, W, H);
+        sceneTime++;
+        drawNightOverlay();
 
         const grd = ctx!.createLinearGradient(0, groundY, 0, H);
         grd.addColorStop(0, 'rgba(5,10,20,0.7)');
@@ -487,8 +429,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         }
         ctx!.restore();
 
-        sceneTime++;
-        drawNightOverlay();
         animFrameId = requestAnimationFrame(draw);
       }
       draw();
@@ -496,6 +436,8 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
 
     function sceneSnow() {
       particles = makeSnowflakes(130);
+      sceneGroundRatio = 0.82;
+      sceneIsSnow = true;
       const W = canvas!.width, H = canvas!.height;
       const groundY = H * 0.82;
 
@@ -510,11 +452,14 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         ctx!.clearRect(0, 0, W, H);
         sceneTime++;
 
+        // 노을/새벽은 바닥보다 먼저 그려서 눈 지형이 태양 위에 실루엣처럼 덮히게
+        drawNightOverlay();
+
         ctx!.save();
         const grd = ctx!.createLinearGradient(0, groundY - 10, 0, H);
-        grd.addColorStop(0, 'rgba(230,240,250,0.7)');
-        grd.addColorStop(0.3, 'rgba(210,225,240,0.85)');
-        grd.addColorStop(1, 'rgba(200,218,235,0.5)');
+        grd.addColorStop(0, 'rgba(230,240,250,1)');
+        grd.addColorStop(0.3, 'rgba(210,225,240,1)');
+        grd.addColorStop(1, 'rgba(200,218,235,1)');
         ctx!.fillStyle = grd;
 
         ctx!.beginPath();
@@ -543,8 +488,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
           if (p.y > groundY) { p.y = -p.r * 2; p.x = Math.random() * W; }
         }
         ctx!.restore();
-
-        drawNightOverlay();
         animFrameId = requestAnimationFrame(draw);
       }
       draw();
@@ -604,6 +547,8 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         drawSoftCloud(W * 0.2, H * 0.12, 60, 0.12, t * 0.3);
         drawSoftCloud(W * 0.6, H * 0.07, 80, 0.1, t * 0.2);
 
+        drawNightOverlay();
+
         const grd = ctx!.createLinearGradient(0, groundY, 0, H);
         grd.addColorStop(0, 'rgba(100,160,80,0.4)');
         grd.addColorStop(0.4, 'rgba(80,140,60,0.5)');
@@ -622,15 +567,14 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
           }
         }
 
-        drawNightOverlay();
         animFrameId = requestAnimationFrame(draw);
       }
       draw();
     }
 
     function sceneClouds() {
+      sceneGroundRatio = 0.82;
       const W = canvas!.width, H = canvas!.height;
-      const groundY = H * 0.8;
 
       const clouds = [
         { x: W * 0.05, y: H * 0.08, r: 28, speed: 0.18, alpha: 0.18 },
@@ -666,59 +610,9 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
           if (c.x > W + c.r * 3) c.x = -c.r * 3;
         }
 
+        drawNightOverlay();
         drawGround('rgba(80,100,120,__A__)', 0.35, 0.82);
-        for (const t of trees) drawRoundTree(t.x, groundY, t.scale, t.alpha);
-
-        drawNightOverlay();
-        animFrameId = requestAnimationFrame(draw);
-      }
-      draw();
-    }
-
-    function sceneMist() {
-      const W = canvas!.width, H = canvas!.height;
-      const groundY = H * 0.78;
-
-      const fogLayers = Array.from({ length: 8 }, (_, i) => ({
-        x: Math.random() * W - 200,
-        y: groundY * 0.5 + i * (groundY * 0.07),
-        w: W * 0.6 + Math.random() * W * 0.5,
-        h: 50 + Math.random() * 50,
-        speed: 0.1 + Math.random() * 0.15,
-        alpha: 0.04 + Math.random() * 0.07,
-      }));
-
-      const trees = [
-        { x: W * 0.1, scale: 0.5, alpha: 0.12 },
-        { x: W * 0.28, scale: 0.8, alpha: 0.18 },
-        { x: W * 0.65, scale: 0.75, alpha: 0.15 },
-        { x: W * 0.85, scale: 0.55, alpha: 0.1 },
-      ];
-
-      function draw() {
-        ctx!.clearRect(0, 0, W, H);
-
-        for (const t of trees) drawBareTree(t.x, groundY, t.scale, t.alpha);
-
-        for (const f of fogLayers) {
-          const grad = ctx!.createLinearGradient(f.x, 0, f.x + f.w, 0);
-          grad.addColorStop(0, 'rgba(200,210,220,0)');
-          grad.addColorStop(0.2, `rgba(200,210,220,${f.alpha})`);
-          grad.addColorStop(0.8, `rgba(200,210,220,${f.alpha})`);
-          grad.addColorStop(1, 'rgba(200,210,220,0)');
-          ctx!.fillStyle = grad;
-          ctx!.fillRect(f.x, f.y, f.w, f.h);
-          f.x += f.speed;
-          if (f.x > W) f.x = -f.w;
-        }
-
-        const grd = ctx!.createLinearGradient(0, groundY, 0, H);
-        grd.addColorStop(0, 'rgba(130,150,160,0.4)');
-        grd.addColorStop(1, 'rgba(100,120,130,0.25)');
-        ctx!.fillStyle = grd;
-        ctx!.fillRect(0, groundY, W, H - groundY);
-
-        drawNightOverlay();
+        for (const t of trees) drawRoundTree(t.x, H * 0.82, t.scale, t.alpha);
         animFrameId = requestAnimationFrame(draw);
       }
       draw();
@@ -737,6 +631,8 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         ctx!.clearRect(0, 0, W, H);
         sceneTime++;
         const t = sceneTime * 0.025;
+
+        drawNightOverlay();
 
         const sx = W * 0.5, sy = H * 0.07;
         drawGlow(sx, sy, W * 0.7, 'rgba(255,180,60,__A__)', 0.18);
@@ -803,8 +699,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         ctx!.fillStyle = mist;
         ctx!.fillRect(0, groundY - 20, W, 50);
         ctx!.restore();
-
-        drawNightOverlay();
         animFrameId = requestAnimationFrame(draw);
       }
       draw();
@@ -817,7 +711,7 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
       clouds: sceneClouds,
       rain: sceneRain,
       snow: sceneSnow,
-      mist: sceneMist,
+      mist: sceneClear,
       heat: sceneHeat,
       thunder: sceneThunder,
     };

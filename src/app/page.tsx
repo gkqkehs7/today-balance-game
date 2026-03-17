@@ -15,14 +15,11 @@ function GameCardSkeleton() {
 }
 
 export default function Home() {
-  const now = new Date();
-  const todayFormatted = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일`;
-
   return (
     <WeatherCanvas>
       <div className="container">
         <header>
-<h1>오늘의 밸런스 게임</h1>
+          <h1>오늘의 밸런스 게임</h1>
           <p className="subtitle">당신의 선택은?</p>
           <VoteCountdown />
         </header>
