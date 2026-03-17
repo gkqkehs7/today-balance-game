@@ -118,7 +118,8 @@ body.theme-light .date-line {
 
 /* ===================== 날씨 정보 칩 ===================== */
 #weather-info {
-  display: inline-flex;
+  display: flex;
+  justify-content: center;
   align-items: center;
   gap: 5px;
   font-size: 0.8rem;
