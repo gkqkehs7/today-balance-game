@@ -147,11 +147,10 @@ export default function CommentItem({
       {comment.replies && comment.replies.length > 0 && (
         <div className="replies">
           {comment.replies.slice(0, visibleReplies).map(reply => {
-            const replyLabel = reply.choice === 'A' ? optionA : optionB;
             return (
               <div key={reply._id} className="reply-item">
                 <div className="comment-header">
-                  <span className={`choice-badge ${reply.choice}`}>{replyLabel}</span>
+                  <span className={`choice-badge ${reply.choice}`}>{reply.choice === 'A' ? optionA : optionB}</span>
                   <span className="comment-time">{formatTime(reply.createdAt)}</span>
                 </div>
                 <p className="comment-text">{reply.text}</p>
