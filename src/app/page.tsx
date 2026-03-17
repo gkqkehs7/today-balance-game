@@ -33,10 +33,9 @@ export default async function Home() {
 
   return (
     <WeatherCanvas>
-      <WeatherInfo />
-
       <div className="container">
         <header>
+          <WeatherInfo />
           <div className="date-line">
             <span>{todayFormatted}</span>
             <span className="dot">·</span>

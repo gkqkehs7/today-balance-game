@@ -102,7 +102,23 @@ export function useWeather(): UseWeatherReturn {
           const id = data.weather[0].id;
           const temp = Math.round(data.main.temp);
           const desc = data.weather[0].description;
-          const city = data.name;
+
+          let city = data.name;
+          try {
+            const geoRes = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ko`,
+              { headers: { 'User-Agent': 'today-balance-game' } }
+            );
+            const geoData = await geoRes.json();
+            city =
+              geoData.address?.city ||
+              geoData.address?.town ||
+              geoData.address?.village ||
+              geoData.address?.county ||
+              data.name;
+          } catch {
+            // fallback to English name
+          }
 
           const currentPhase = getTimePhase();
           const type = classifyWeather(id, temp);
