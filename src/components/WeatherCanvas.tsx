@@ -97,14 +97,50 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         drawGlow(mx, my, 120, 'rgba(200,200,160,__A__)', 0.06);
       }
 
+      if (currentTimePhase === 'dusk') {
+        // 저녁 초승달
+        const mx = W * 0.2, my = H * 0.12;
+        ctx!.save();
+        ctx!.fillStyle = 'rgba(240,230,190,0.7)';
+        ctx!.shadowColor = 'rgba(220,210,160,0.4)';
+        ctx!.shadowBlur = 18;
+        ctx!.beginPath();
+        ctx!.arc(mx, my, 16, 0, Math.PI * 2);
+        ctx!.fill();
+        ctx!.fillStyle = 'rgba(100,50,80,0.75)'; // dusk sky color to cut crescent
+        ctx!.shadowBlur = 0;
+        ctx!.beginPath();
+        ctx!.arc(mx + 7, my - 2, 14, 0, Math.PI * 2);
+        ctx!.fill();
+        ctx!.restore();
+      }
+
       if (currentTimePhase === 'dawn' || currentTimePhase === 'dusk') {
         const isDawn = currentTimePhase === 'dawn';
-        const hx = isDawn ? W * 0.3 : W * 0.7;
-        const hy = H * 0.72;
+        const hx = isDawn ? W * 0.25 : W * 0.75;
+        const horizonY = H * 0.78;
+        const sunR = Math.min(W, H) * 0.07;
+
+        // 지는/뜨는 태양 (지평선에 걸친 반원)
+        const sunColor = isDawn ? 'rgba(255,200,80,0.92)' : 'rgba(255,110,30,0.92)';
+        const glowColor = isDawn ? '#ffcc44' : '#ff5500';
+        ctx!.save();
+        ctx!.beginPath();
+        ctx!.rect(0, 0, W, horizonY); // 지평선 위만 클리핑
+        ctx!.clip();
+        ctx!.shadowColor = glowColor;
+        ctx!.shadowBlur = 50;
+        ctx!.fillStyle = sunColor;
+        ctx!.beginPath();
+        ctx!.arc(hx, horizonY, sunR, 0, Math.PI * 2);
+        ctx!.fill();
+        ctx!.restore();
+
+        // 수평선 빛 번짐
         const c1 = isDawn ? 'rgba(255,160,80,__A__)' : 'rgba(255,80,40,__A__)';
         const c2 = isDawn ? 'rgba(200,100,160,__A__)' : 'rgba(160,40,100,__A__)';
-        drawGlow(hx, hy, W * 0.55, c1, 0.18);
-        drawGlow(hx, hy, W * 0.3, c2, 0.1);
+        drawGlow(hx, horizonY, W * 0.6, c1, 0.22);
+        drawGlow(hx, horizonY, W * 0.3, c2, 0.14);
       }
     }
 
@@ -614,13 +650,14 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
       const W = canvas!.width, H = canvas!.height;
       const groundY = H * 0.8;
 
-      const clouds = Array.from({ length: 6 }, (_, i) => ({
-        x: Math.random() * W,
-        y: H * 0.04 + i * H * 0.1 + Math.random() * H * 0.04,
-        r: 55 + Math.random() * 70,
-        speed: 0.12 + Math.random() * 0.2,
-        alpha: 0.1 + Math.random() * 0.12,
-      }));
+      const clouds = [
+        { x: W * 0.05, y: H * 0.08, r: 28, speed: 0.18, alpha: 0.18 },
+        { x: W * 0.35, y: H * 0.05, r: 38, speed: 0.14, alpha: 0.15 },
+        { x: W * 0.65, y: H * 0.10, r: 32, speed: 0.20, alpha: 0.16 },
+        { x: W * 0.80, y: H * 0.06, r: 24, speed: 0.16, alpha: 0.13 },
+        { x: W * 0.20, y: H * 0.18, r: 30, speed: 0.12, alpha: 0.12 },
+        { x: W * 0.55, y: H * 0.22, r: 26, speed: 0.15, alpha: 0.11 },
+      ];
 
       const trees = [
         { x: W * 0.06, scale: 0.65, alpha: 0.28 },
@@ -628,11 +665,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         { x: W * 0.82, scale: 0.8, alpha: 0.32 },
         { x: W * 0.93, scale: 0.6, alpha: 0.25 },
       ];
-
-      const ridgePoints = Array.from({ length: 30 }, (_, i) => ({
-        x: (i / 29) * W,
-        y: groundY - 20 - Math.sin((i / 29) * Math.PI * 2.5) * 60 - Math.random() * 30,
-      }));
 
       function draw() {
         ctx!.clearRect(0, 0, W, H);
@@ -643,29 +675,16 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
           ctx!.fillStyle = `rgba(255,255,255,${c.alpha})`;
           ctx!.beginPath();
           ctx!.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-          ctx!.arc(c.x + c.r, c.y - c.r * 0.28, c.r * 0.72, 0, Math.PI * 2);
-          ctx!.arc(c.x + c.r * 1.75, c.y, c.r * 0.85, 0, Math.PI * 2);
+          ctx!.arc(c.x + c.r * 0.9, c.y - c.r * 0.25, c.r * 0.65, 0, Math.PI * 2);
+          ctx!.arc(c.x + c.r * 1.6, c.y, c.r * 0.75, 0, Math.PI * 2);
           ctx!.fill();
           ctx!.restore();
 
           c.x += c.speed;
-          if (c.x > W + c.r * 2.5) c.x = -c.r * 2.5;
+          if (c.x > W + c.r * 3) c.x = -c.r * 3;
         }
 
-        ctx!.save();
-        const grd = ctx!.createLinearGradient(0, groundY - 80, 0, H);
-        grd.addColorStop(0, 'rgba(90,110,130,0.35)');
-        grd.addColorStop(0.4, 'rgba(70,90,110,0.5)');
-        grd.addColorStop(1, 'rgba(50,70,90,0.3)');
-        ctx!.fillStyle = grd;
-        ctx!.beginPath();
-        ctx!.moveTo(0, H);
-        for (const p of ridgePoints) ctx!.lineTo(p.x, p.y);
-        ctx!.lineTo(W, H);
-        ctx!.closePath();
-        ctx!.fill();
-        ctx!.restore();
-
+        drawGround('rgba(80,100,120,__A__)', 0.35, 0.82);
         for (const t of trees) drawRoundTree(t.x, groundY, t.scale, t.alpha);
 
         drawNightOverlay();
