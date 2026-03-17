@@ -115,18 +115,39 @@ body.theme-light .date-line {
 /* ===================== 통계 바 ===================== */
 .stats-bar {
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 12px;
-  font-size: 0.82rem;
-  color: rgba(255,255,255,0.7);
   margin-bottom: 16px;
+}
+.stats-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 14px;
+  padding: 14px 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.stats-label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.01em;
+}
+.stats-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
   letter-spacing: 0.02em;
 }
-.stats-bar strong { color: rgba(255,255,255,0.95); font-weight: 700; }
-.stats-sep { opacity: 0.4; }
-body.theme-light .stats-bar { color: rgba(18,24,38,0.6); }
-body.theme-light .stats-bar strong { color: rgba(18,24,38,0.9); }
+body.theme-light .stats-box {
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.1);
+}
+body.theme-light .stats-label { color: rgba(18,24,38,0.55); }
+body.theme-light .stats-value { color: rgba(18,24,38,0.9); }
 
 /* ===================== 메인 컨테이너 ===================== */
 .container {
