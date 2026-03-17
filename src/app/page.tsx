@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import WeatherCanvas from '@/components/WeatherCanvas';
 import VoteCountdown from '@/components/VoteCountdown';
 import GameCardLoader from '@/components/GameCardLoader';
+import StatsBar from '@/components/StatsBar';
 
 function GameCardSkeleton() {
   return (
@@ -26,6 +27,8 @@ export default function Home() {
           <p className="subtitle">당신의 선택은?</p>
           <VoteCountdown />
         </header>
+
+        <StatsBar />
 
         <Suspense fallback={<GameCardSkeleton />}>
           <GameCardLoader />
