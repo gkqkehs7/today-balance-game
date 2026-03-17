@@ -3,6 +3,19 @@ import { connectDB } from '@/lib/mongodb';
 import { checkAdminAuth } from '@/lib/adminAuth';
 import Question from '@/models/Question';
 
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!checkAdminAuth(req)) return NextResponse.json({ error: '인증 실패' }, { status: 401 });
+  try {
+    const { id } = await params;
+    const body = await req.json();
+    await connectDB();
+    await Question.findByIdAndUpdate(id, body);
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: '서버 오류' }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!checkAdminAuth(req)) return NextResponse.json({ error: '인증 실패' }, { status: 401 });
   try {

@@ -18,6 +18,9 @@ export default function AdminPage() {
   const [questionList, setQuestionList] = useState<IQuestion[]>([]);
   const [listMsg, setListMsg] = useState('');
 
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editFields, setEditFields] = useState({ question: '', optionA: '', optionB: '', date: '' });
+
   function handleLogin() {
     const secret = secretInput.trim();
     if (!secret) return;
@@ -59,6 +62,26 @@ export default function AdminPage() {
       setListMsg(questions.length === 0 ? '등록된 문제가 없습니다.' : '');
     } catch {
       setListMsg('❌ 서버 오류');
+    }
+  }
+
+  function startEdit(q: IQuestion) {
+    setEditingId(q._id);
+    setEditFields({ question: q.question, optionA: q.optionA, optionB: q.optionB, date: q.date });
+  }
+
+  async function saveEdit(id: string) {
+    try {
+      const res = await fetch(`/api/questions/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': adminSecret },
+        body: JSON.stringify(editFields),
+      });
+      if (!res.ok) { const d = await res.json(); alert(d.error); return; }
+      setQuestionList(prev => prev.map(q => q._id === id ? { ...q, ...editFields } : q));
+      setEditingId(null);
+    } catch {
+      alert('서버 오류');
     }
   }
 
@@ -147,20 +170,33 @@ export default function AdminPage() {
                     borderRadius: '10px',
                     padding: '14px 16px',
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: '12px',
+                    flexDirection: 'column',
+                    gap: '10px',
                   }}>
-                    <div>
-                      <div style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '4px' }}>{q.date}</div>
-                      <div style={{ fontSize: '0.92rem' }}>{q.question}</div>
-                    </div>
-                    <button
-                      onClick={() => deleteQuestion(q._id)}
-                      style={{ ...btnStyle, background: '#dc2626', padding: '6px 14px', fontSize: '0.82rem', flexShrink: 0 }}
-                    >
-                      삭제
-                    </button>
+                    {editingId === q._id ? (
+                      <>
+                        <input value={editFields.question} onChange={e => setEditFields(p => ({ ...p, question: e.target.value }))} placeholder="질문" style={inputStyle} />
+                        <input value={editFields.optionA} onChange={e => setEditFields(p => ({ ...p, optionA: e.target.value }))} placeholder="선택지 A" style={inputStyle} />
+                        <input value={editFields.optionB} onChange={e => setEditFields(p => ({ ...p, optionB: e.target.value }))} placeholder="선택지 B" style={inputStyle} />
+                        <input type="date" value={editFields.date} onChange={e => setEditFields(p => ({ ...p, date: e.target.value }))} style={inputStyle} />
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button onClick={() => saveEdit(q._id)} style={{ ...btnStyle, flex: 1 }}>저장</button>
+                          <button onClick={() => setEditingId(null)} style={{ ...btnStyle, background: '#475569', flex: 1 }}>취소</button>
+                        </div>
+                      </>
+                    ) : (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                        <div>
+                          <div style={{ fontSize: '0.78rem', color: '#64748b', marginBottom: '4px' }}>{q.date}</div>
+                          <div style={{ fontSize: '0.92rem' }}>{q.question}</div>
+                          <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>A: {q.optionA} / B: {q.optionB}</div>
+                        </div>
+                        <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                          <button onClick={() => startEdit(q)} style={{ ...btnStyle, background: '#0ea5e9', padding: '6px 14px', fontSize: '0.82rem' }}>수정</button>
+                          <button onClick={() => deleteQuestion(q._id)} style={{ ...btnStyle, background: '#dc2626', padding: '6px 14px', fontSize: '0.82rem' }}>삭제</button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
