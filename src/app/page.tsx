@@ -14,7 +14,9 @@ async function getTodayQuestion(): Promise<IQuestion | null> {
     if (!question) {
       question = await Question.findOne({ date: { $lte: today } }).sort({ date: -1 }).lean();
     }
-    return question as IQuestion | null;
+    if (!question) return null;
+    // ObjectId → string 직렬화
+    return JSON.parse(JSON.stringify(question)) as IQuestion;
   } catch {
     return null;
   }
