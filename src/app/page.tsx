@@ -3,7 +3,6 @@ import WeatherCanvas from '@/components/WeatherCanvas';
 import WeatherInfo from '@/components/WeatherInfo';
 import GameCard from '@/components/GameCard';
 import VoteCountdown from '@/components/VoteCountdown';
-import AdminModal from '@/components/AdminModal';
 
 async function getTodayQuestion(): Promise<IQuestion | null> {
   try {
@@ -44,7 +43,6 @@ export default async function Home() {
         <GameCard initialQuestion={question} />
       </div>
 
-      <AdminModal />
     </WeatherCanvas>
   );
 }
