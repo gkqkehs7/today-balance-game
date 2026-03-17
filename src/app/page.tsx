@@ -24,9 +24,6 @@ export default function Home() {
       <div className="container">
         <header>
           <WeatherInfo />
-          <div className="date-line">
-            <span>{todayFormatted}</span>
-          </div>
           <h1>오늘의 밸런스 게임</h1>
           <p className="subtitle">당신의 선택은?</p>
           <VoteCountdown />
