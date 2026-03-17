@@ -22,6 +22,10 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
     let animFrameId: number | null = null;
     let sceneTime = 0;
     let stars: { x: number; y: number; r: number; twinkle: number; speed: number }[] | null = null;
+    let moonImg: HTMLImageElement | null = null;
+    const moonImgEl = new Image();
+    moonImgEl.src = '/images/moon.png';
+    moonImgEl.onload = () => { moonImg = moonImgEl; };
 
     const currentTimePhase: TimePhase = timePhase;
 
@@ -97,17 +101,13 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         drawGlow(mx, my, 120, 'rgba(200,200,160,__A__)', 0.06);
       }
 
-      if (currentTimePhase === 'dusk') {
-        // 저녁 초승달 (evenodd 규칙으로 깔끔하게)
-        const mx = W * 0.2, my = H * 0.1;
+      if (currentTimePhase === 'dusk' && moonImg) {
+        const size = 64;
+        const mx = W * 0.2 - size / 2;
+        const my = H * 0.08;
         ctx!.save();
-        ctx!.fillStyle = 'rgba(240,230,190,0.88)';
-        ctx!.shadowColor = 'rgba(230,215,160,0.6)';
-        ctx!.shadowBlur = 16;
-        ctx!.beginPath();
-        ctx!.arc(mx, my, 20, 0, Math.PI * 2, false);
-        ctx!.arc(mx + 11, my - 2, 17, 0, Math.PI * 2, false);
-        ctx!.fill('evenodd');
+        ctx!.globalAlpha = 0.88;
+        ctx!.drawImage(moonImg, mx, my, size, size);
         ctx!.restore();
       }
 
