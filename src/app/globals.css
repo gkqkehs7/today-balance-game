@@ -43,12 +43,6 @@ body.time-dusk.weather-snow     { background: linear-gradient(175deg, #281828 0%
 /* ===================== 밝은 배경일 때 — 어두운 텍스트 ===================== */
 body.theme-light { color: rgba(18, 24, 38, 0.9); }
 
-body.theme-light #weather-info {
-  color: rgba(18,24,38,0.85);
-  background: rgba(255,255,255,0.45);
-  border-color: rgba(0,0,0,0.12);
-  text-shadow: none;
-}
 body.theme-light .date-line   { color: rgba(18,24,38,0.8); text-shadow: none; }
 body.theme-light .dot         { color: rgba(18,24,38,0.55); }
 body.theme-light header h1    { color: #121826; text-shadow: 0 2px 12px rgba(255,255,255,0.5); }
@@ -116,27 +110,6 @@ body.theme-light .date-line {
   pointer-events: none;
 }
 
-/* ===================== 날씨 정보 칩 ===================== */
-#weather-info {
-  display: inline-flex;
-  width: fit-content;
-  margin: 0 auto;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.92);
-  background: rgba(0,0,0,0.18);
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 6px 14px;
-  border-radius: 999px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  letter-spacing: 0.02em;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  margin-bottom: 10px;
-}
-.weather-sep { opacity: 0.5; }
 
 /* ===================== 메인 컨테이너 ===================== */
 .container {

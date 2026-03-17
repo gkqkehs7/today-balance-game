@@ -2,7 +2,6 @@ export const dynamic = 'force-dynamic';
 
 import { Suspense } from 'react';
 import WeatherCanvas from '@/components/WeatherCanvas';
-import WeatherInfo from '@/components/WeatherInfo';
 import VoteCountdown from '@/components/VoteCountdown';
 import GameCardLoader from '@/components/GameCardLoader';
 
@@ -23,8 +22,7 @@ export default function Home() {
     <WeatherCanvas>
       <div className="container">
         <header>
-          <WeatherInfo />
-          <h1>오늘의 밸런스 게임</h1>
+<h1>오늘의 밸런스 게임</h1>
           <p className="subtitle">당신의 선택은?</p>
           <VoteCountdown />
         </header>

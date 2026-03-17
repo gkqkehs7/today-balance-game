@@ -3,17 +3,9 @@
 import { useState, useEffect } from 'react';
 import { WeatherType, TimePhase } from '@/types';
 
-interface WeatherInfo {
-  icon: string;
-  city: string;
-  temp: string;
-  desc: string;
-}
-
 interface UseWeatherReturn {
   weatherType: WeatherType;
   timePhase: TimePhase;
-  weatherInfo: WeatherInfo;
   ready: boolean;
 }
 
@@ -40,19 +32,6 @@ function classifyWeather(id: number, temp: number): WeatherType {
   return 'clear';
 }
 
-function getWeatherIcon(type: WeatherType, phase: TimePhase): string {
-  const icons: Record<WeatherType, string> = {
-    clear:   phase === 'night' ? '🌙' : (phase === 'dawn' || phase === 'dusk') ? '🌅' : '☀️',
-    clouds:  '☁️',
-    rain:    '🌧️',
-    snow:    phase === 'night' ? '🌨️' : '❄️',
-    mist:    '🌫️',
-    heat:    '🔥',
-    thunder: '⛈️',
-  };
-  return icons[type] || '🌤️';
-}
-
 function applyBodyClasses(type: WeatherType, phase: TimePhase) {
   if (typeof document === 'undefined') return;
 
@@ -68,16 +47,14 @@ function applyBodyClasses(type: WeatherType, phase: TimePhase) {
   document.body.classList.add(isLightBackground(type, phase) ? 'theme-light' : 'theme-dark');
 }
 
+// 서울 고정 좌표
+const SEOUL_LAT = 37.5665;
+const SEOUL_LON = 126.9780;
+
 export function useWeather(): UseWeatherReturn {
   const [weatherType, setWeatherType] = useState<WeatherType>('clear');
   const [timePhase, setTimePhase] = useState<TimePhase>('day');
   const [ready, setReady] = useState(false);
-  const [weatherInfo, setWeatherInfo] = useState<WeatherInfo>({
-    icon: '☀️',
-    city: '--',
-    temp: '--',
-    desc: '--',
-  });
 
   useEffect(() => {
     const phase = getTimePhase();
@@ -85,68 +62,33 @@ export function useWeather(): UseWeatherReturn {
 
     const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_KEY;
 
-    if (!apiKey || !navigator.geolocation) {
+    if (!apiKey) {
       applyBodyClasses('clear', phase);
-      setWeatherInfo(prev => ({ ...prev, icon: getWeatherIcon('clear', phase) }));
       setReady(true);
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        try {
-          const { latitude: lat, longitude: lon } = pos.coords;
-          const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=kr`;
-          const data = await fetch(url).then(r => r.json());
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${SEOUL_LAT}&lon=${SEOUL_LON}&appid=${apiKey}&units=metric`;
 
-          const id = data.weather[0].id;
-          const temp = Math.round(data.main.temp);
-          const desc = data.weather[0].description;
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        const id = data.weather[0].id;
+        const temp = Math.round(data.main.temp);
+        const currentPhase = getTimePhase();
+        const type = classifyWeather(id, temp);
 
-          let city = data.name;
-          try {
-            const geoRes = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=ko`,
-              { headers: { 'User-Agent': 'today-balance-game' } }
-            );
-            const geoData = await geoRes.json();
-            city =
-              geoData.address?.city ||
-              geoData.address?.town ||
-              geoData.address?.village ||
-              geoData.address?.county ||
-              data.name;
-          } catch {
-            // fallback to English name
-          }
-
-          const currentPhase = getTimePhase();
-          const type = classifyWeather(id, temp);
-
-          setWeatherType(type);
-          setTimePhase(currentPhase);
-          setWeatherInfo({
-            icon: getWeatherIcon(type, currentPhase),
-            city,
-            temp: String(temp),
-            desc,
-          });
-
-          applyBodyClasses(type, currentPhase);
-        } catch {
-          applyBodyClasses('clear', phase);
-          setWeatherInfo(prev => ({ ...prev, icon: getWeatherIcon('clear', phase) }));
-        }
-        setReady(true);
-      },
-      () => {
+        setWeatherType(type);
+        setTimePhase(currentPhase);
+        applyBodyClasses(type, currentPhase);
+      })
+      .catch(() => {
         applyBodyClasses('clear', phase);
-        setWeatherInfo(prev => ({ ...prev, icon: getWeatherIcon('clear', phase) }));
+      })
+      .finally(() => {
         setReady(true);
-      },
-      { timeout: 6000 }
-    );
+      });
   }, []);
 
-  return { weatherType, timePhase, weatherInfo, ready };
+  return { weatherType, timePhase, ready };
 }
