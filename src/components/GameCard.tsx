@@ -8,6 +8,7 @@ import ResultBar from '@/components/ResultBar';
 import CommentSection from '@/components/CommentSection';
 import ShareButton from '@/components/ShareButton';
 import MockBanner from '@/components/MockBanner';
+import StatsBar from '@/components/StatsBar';
 
 interface GameCardProps {
   initialQuestion: IQuestion | null;
@@ -136,6 +137,8 @@ export default function GameCard({ initialQuestion }: GameCardProps) {
           />
         )}
       </div>
+
+      <StatsBar />
 
       {voteState === 'confirmed' && (
         <ShareButton />

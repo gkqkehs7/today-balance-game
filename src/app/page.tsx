@@ -4,7 +4,6 @@ import { Suspense } from 'react';
 import WeatherCanvas from '@/components/WeatherCanvas';
 import VoteCountdown from '@/components/VoteCountdown';
 import GameCardLoader from '@/components/GameCardLoader';
-import StatsBar from '@/components/StatsBar';
 
 function GameCardSkeleton() {
   return (
@@ -31,8 +30,6 @@ export default function Home() {
         <Suspense fallback={<GameCardSkeleton />}>
           <GameCardLoader />
         </Suspense>
-
-        <StatsBar />
       </div>
     </WeatherCanvas>
   );
