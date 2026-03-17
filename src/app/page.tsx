@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import WeatherCanvas from '@/components/WeatherCanvas';
 import VoteCountdown from '@/components/VoteCountdown';
 import GameCardLoader from '@/components/GameCardLoader';
+import ScrollToTop from '@/components/ScrollToTop';
 
 function GameCardSkeleton() {
   return (
@@ -16,18 +17,21 @@ function GameCardSkeleton() {
 
 export default function Home() {
   return (
-    <WeatherCanvas>
-      <div className="container">
-        <header>
-          <h1>오늘의 밸런스 게임</h1>
-          <p className="subtitle">당신의 선택은?</p>
-          <VoteCountdown />
-        </header>
+    <>
+      <WeatherCanvas>
+        <div className="container">
+          <header>
+            <h1>오늘의 밸런스 게임</h1>
+            <p className="subtitle">당신의 선택은?</p>
+            <VoteCountdown />
+          </header>
 
-        <Suspense fallback={<GameCardSkeleton />}>
-          <GameCardLoader />
-        </Suspense>
-      </div>
-    </WeatherCanvas>
+          <Suspense fallback={<GameCardSkeleton />}>
+            <GameCardLoader />
+          </Suspense>
+        </div>
+      </WeatherCanvas>
+      <ScrollToTop />
+    </>
   );
 }
