@@ -835,8 +835,13 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
   border-color: rgba(255,210,60,0.35) !important;
   background: rgba(255,210,60,0.06) !important;
 }
+.comment-pinned {
+  padding-top: 7px !important;
+}
 .pin-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.04em;
