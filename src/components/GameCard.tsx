@@ -14,13 +14,10 @@ interface GameCardProps {
   initialQuestion: IQuestion | null;
 }
 
-function getTodayKey(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
 export default function GameCard({ initialQuestion }: GameCardProps) {
   const isMock = initialQuestion === null;
   const question: IQuestion = initialQuestion ?? MOCK_QUESTION;
+  const voteKey = isMock ? `vote_mock_${question._id}` : `vote_${question._id}`;
 
   const [voteState, setVoteState] = useState<VoteState>('idle');
   const [pendingChoice, setPendingChoice] = useState<VoteChoice | null>(null);
@@ -28,7 +25,6 @@ export default function GameCard({ initialQuestion }: GameCardProps) {
   const [voteResult, setVoteResult] = useState<IVoteResult | null>(null);
 
   useEffect(() => {
-    const voteKey = isMock ? `vote_mock_${getTodayKey()}` : `vote_${getTodayKey()}`;
     const savedChoice = localStorage.getItem(voteKey) as VoteChoice | null;
     if (savedChoice) {
       setMyChoice(savedChoice);
@@ -52,7 +48,6 @@ export default function GameCard({ initialQuestion }: GameCardProps) {
   }
 
   function selectChoice(choice: VoteChoice) {
-    const voteKey = isMock ? `vote_mock_${getTodayKey()}` : `vote_${getTodayKey()}`;
     if (localStorage.getItem(voteKey)) return;
     setPendingChoice(choice);
     setVoteState('pending');
@@ -63,8 +58,6 @@ export default function GameCard({ initialQuestion }: GameCardProps) {
     const choice = pendingChoice;
     setPendingChoice(null);
     setVoteState('loading');
-
-    const voteKey = isMock ? `vote_mock_${getTodayKey()}` : `vote_${getTodayKey()}`;
 
     if (isMock) {
       localStorage.setItem(voteKey, choice);
