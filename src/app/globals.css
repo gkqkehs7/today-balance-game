@@ -833,11 +833,67 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
   color: rgba(255,255,255,0.88);
 }
 
+/* 인기 댓글 핀 */
+.comment-pinned {
+  border-color: rgba(255,210,60,0.35) !important;
+  background: rgba(255,210,60,0.06) !important;
+}
+.pin-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(255,210,60,0.9);
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+body.theme-light .comment-pinned {
+  border-color: rgba(200,160,0,0.35) !important;
+  background: rgba(255,220,0,0.06) !important;
+}
+body.theme-light .pin-badge { color: rgba(160,120,0,0.9); }
+
+/* 댓글 하단 액션 영역 */
+.comment-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.reaction-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.reaction-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  padding: 3px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: color 0.15s, background 0.15s;
+}
+.reaction-btn:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.07); }
+.reaction-btn.active-like { color: #5a9ff5; }
+.reaction-btn.active-like:hover { color: #5a9ff5; background: rgba(90,159,245,0.1); }
+.reaction-btn.active-dislike { color: #f07070; }
+.reaction-btn.active-dislike:hover { color: #f07070; background: rgba(240,112,112,0.1); }
+
+body.theme-light .reaction-btn { color: rgba(18,24,38,0.38); }
+body.theme-light .reaction-btn:hover { color: rgba(18,24,38,0.7); background: rgba(0,0,0,0.05); }
+body.theme-light .reaction-btn.active-like { color: #2a6fd4; }
+body.theme-light .reaction-btn.active-dislike { color: #c03030; }
+
 .reply-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  margin-top: 10px;
   background: transparent;
   border: none;
   color: rgba(255,255,255,0.45);

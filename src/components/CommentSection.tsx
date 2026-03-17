@@ -67,6 +67,8 @@ export default function CommentSection({
         parentId: null,
         choice: myChoice,
         text,
+        likes: 0,
+        dislikes: 0,
         createdAt: new Date().toISOString(),
         replies: [],
       };
@@ -97,8 +99,16 @@ export default function CommentSection({
   const badgeText = myChoice === 'A' ? optionA : optionB;
   const badgeClass = `my-team-badge ${myChoice === 'A' ? 'team-a' : 'team-b'}`;
 
-  // Count total including replies
   const totalCount = comments.reduce((acc, c) => acc + 1 + (c.replies?.length ?? 0), 0);
+
+  // 좋아요 상위 3개 (likes >= 1) 핀 처리
+  const sorted = [...comments].sort((a, b) => (b.likes ?? 0) - (a.likes ?? 0));
+  const pinnedIds = new Set(
+    sorted.filter(c => (c.likes ?? 0) >= 1).slice(0, 3).map(c => c._id)
+  );
+  const pinned = sorted.filter(c => pinnedIds.has(c._id));
+  const rest = comments.filter(c => !pinnedIds.has(c._id));
+  const orderedComments = [...pinned, ...rest];
 
   return (
     <div className="comment-section">
@@ -137,7 +147,7 @@ export default function CommentSection({
           <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>아직 댓글이 없습니다. 첫 댓글을 남겨보세요!</p>
         ) : (
           <>
-            {comments.slice(0, visibleCount).map(comment => (
+            {orderedComments.slice(0, visibleCount).map(comment => (
               <CommentItem
                 key={comment._id}
                 comment={comment}
@@ -146,16 +156,17 @@ export default function CommentSection({
                 optionA={optionA}
                 optionB={optionB}
                 isMock={isMock}
+                pinned={pinnedIds.has(comment._id)}
                 onReply={loadComments}
                 formatTime={formatTime}
               />
             ))}
-            {visibleCount < comments.length && (
+            {visibleCount < orderedComments.length && (
               <button
                 className="load-more-btn"
                 onClick={() => setVisibleCount(v => v + 5)}
               >
-                댓글 더보기 ({comments.length - visibleCount}개 남음)
+                댓글 더보기 ({orderedComments.length - visibleCount}개 남음)
               </button>
             )}
           </>

@@ -23,6 +23,8 @@ export interface IComment {
   parentId: string | null;
   choice: 'A' | 'B';
   text: string;
+  likes: number;
+  dislikes: number;
   createdAt: string;
   replies: IComment[];
 }

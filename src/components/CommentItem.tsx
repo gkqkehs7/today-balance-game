@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IComment, VoteChoice } from '@/types';
 import { MOCK_COMMENTS } from '@/lib/mockData';
 
@@ -11,6 +11,7 @@ interface CommentItemProps {
   optionA: string;
   optionB: string;
   isMock: boolean;
+  pinned?: boolean;
   onReply: () => void;
   formatTime: (iso: string) => string;
 }
@@ -22,18 +23,69 @@ export default function CommentItem({
   optionA,
   optionB,
   isMock,
+  pinned,
   onReply,
   formatTime,
 }: CommentItemProps) {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [visibleReplies, setVisibleReplies] = useState(3);
+  const [likes, setLikes] = useState(comment.likes ?? 0);
+  const [dislikes, setDislikes] = useState(comment.dislikes ?? 0);
+  const [myReaction, setMyReaction] = useState<'like' | 'dislike' | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(`reaction_${comment._id}`);
+    if (stored === 'like' || stored === 'dislike') setMyReaction(stored);
+  }, [comment._id]);
 
   const optionLabel = comment.choice === 'A' ? optionA : optionB;
 
   function toggleReply() {
     setShowReplyInput(prev => !prev);
     setReplyText('');
+  }
+
+  async function handleReaction(type: 'like' | 'dislike') {
+    const isSame = myReaction === type;
+    const delta = isSame ? -1 : 1;
+    const newReaction = isSame ? null : type;
+
+    // 반대 리액션 취소
+    if (myReaction && myReaction !== type) {
+      if (isMock) {
+        if (myReaction === 'like') setLikes(l => l - 1);
+        else setDislikes(d => d - 1);
+      } else {
+        await fetch(`/api/comments/${comment._id}/like`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: myReaction, delta: -1 }),
+        });
+        if (myReaction === 'like') setLikes(l => l - 1);
+        else setDislikes(d => d - 1);
+      }
+    }
+
+    if (isMock) {
+      if (type === 'like') setLikes(l => l + delta);
+      else setDislikes(d => d + delta);
+    } else {
+      const res = await fetch(`/api/comments/${comment._id}/like`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, delta }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setLikes(data.likes);
+        setDislikes(data.dislikes);
+      }
+    }
+
+    setMyReaction(newReaction);
+    if (newReaction) localStorage.setItem(`reaction_${comment._id}`, newReaction);
+    else localStorage.removeItem(`reaction_${comment._id}`);
   }
 
   async function submitReply() {
@@ -49,6 +101,8 @@ export default function CommentItem({
           parentId: comment._id,
           choice: myChoice,
           text,
+          likes: 0,
+          dislikes: 0,
           createdAt: new Date().toISOString(),
           replies: [],
         });
@@ -82,7 +136,8 @@ export default function CommentItem({
   const replyBadgeClass = `my-team-badge ${myChoice === 'A' ? 'team-a' : 'team-b'}`;
 
   return (
-    <div className="comment-item">
+    <div className={`comment-item${pinned ? ' comment-pinned' : ''}`}>
+      {pinned && <span className="pin-badge">👍 인기</span>}
       <div className="comment-header">
         <span className={`choice-badge ${comment.choice}`}>{optionLabel}</span>
         <span className="comment-time">{formatTime(comment.createdAt)}</span>
@@ -114,13 +169,37 @@ export default function CommentItem({
         </div>
       )}
 
-      <button className="reply-btn" onClick={toggleReply}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="9 17 4 12 9 7"/>
-          <path d="M20 18v-2a4 4 0 0 0-4-4H4"/>
-        </svg>
-        {showReplyInput ? '취소' : '답글'}
-      </button>
+      <div className="comment-actions">
+        <div className="reaction-btns">
+          <button
+            className={`reaction-btn${myReaction === 'like' ? ' active-like' : ''}`}
+            onClick={() => handleReaction('like')}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill={myReaction === 'like' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
+              <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+            </svg>
+            <span>{likes > 0 ? likes : ''}</span>
+          </button>
+          <button
+            className={`reaction-btn${myReaction === 'dislike' ? ' active-dislike' : ''}`}
+            onClick={() => handleReaction('dislike')}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill={myReaction === 'dislike' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/>
+              <path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/>
+            </svg>
+            <span>{dislikes > 0 ? dislikes : ''}</span>
+          </button>
+        </div>
+        <button className="reply-btn" onClick={toggleReply}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 17 4 12 9 7"/>
+            <path d="M20 18v-2a4 4 0 0 0-4-4H4"/>
+          </svg>
+          {showReplyInput ? '취소' : '답글'}
+        </button>
+      </div>
 
       {showReplyInput && (
         <div className="reply-input-wrap">
