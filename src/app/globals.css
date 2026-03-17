@@ -15,7 +15,7 @@ body {
 
 /* ===================== 날씨별 배경 — 낮 (기본) ===================== */
 body.weather-clear   { background: linear-gradient(175deg, #5ab8ec 0%, #9ed8f4 40%, #d6f0c8 100%); }
-body.weather-clouds  { background: linear-gradient(175deg, #6a7f96 0%, #96aabb 50%, #b8ccd8 100%); }
+body.weather-clouds  { background: linear-gradient(175deg, #5ab8ec 0%, #9ed8f4 40%, #d6f0c8 100%); }
 body.weather-rain    { background: linear-gradient(175deg, #1e2e3e 0%, #2e4458 50%, #3a5468 100%); }
 body.weather-snow    { background: linear-gradient(175deg, #b8ccd8 0%, #cddde8 50%, #e2eef6 100%); }
 body.weather-mist    { background: linear-gradient(175deg, #7a98a8 0%, #a0b8c4 50%, #b8ccd4 100%); }
@@ -24,7 +24,7 @@ body.weather-thunder { background: linear-gradient(175deg, #080f18 0%, #121e2c 5
 
 /* ===================== 날씨별 배경 — 밤 ===================== */
 body.time-night.weather-clear   { background: linear-gradient(175deg, #06101e 0%, #0c1c32 50%, #122440 100%); }
-body.time-night.weather-clouds  { background: linear-gradient(175deg, #0c1018 0%, #141c26 50%, #1c2430 100%); }
+body.time-night.weather-clouds  { background: linear-gradient(175deg, #06101e 0%, #0c1c32 50%, #122440 100%); }
 body.time-night.weather-rain    { background: linear-gradient(175deg, #080e16 0%, #10181e 50%, #161e26 100%); }
 body.time-night.weather-snow    { background: linear-gradient(175deg, #0e1826 0%, #1a2436 50%, #222e44 100%); }
 body.time-night.weather-mist    { background: linear-gradient(175deg, #0e1820 0%, #18242c 50%, #202e38 100%); }
@@ -33,11 +33,11 @@ body.time-night.weather-thunder { background: linear-gradient(175deg, #04080e 0%
 
 /* ===================== 날씨별 배경 — 새벽 / 황혼 ===================== */
 body.time-dawn.weather-clear    { background: linear-gradient(175deg, #1e1030 0%, #8b3a5c 40%, #f09050 100%); }
-body.time-dawn.weather-clouds   { background: linear-gradient(175deg, #28202e 0%, #6a4858 50%, #9a7070 100%); }
+body.time-dawn.weather-clouds   { background: linear-gradient(175deg, #1e1030 0%, #8b3a5c 40%, #f09050 100%); }
 body.time-dawn.weather-snow     { background: linear-gradient(175deg, #2e2038 0%, #7a6080 50%, #c8a8b8 100%); }
 body.time-dawn.weather-mist     { background: linear-gradient(175deg, #28303a 0%, #607080 50%, #9ab0b8 100%); }
 body.time-dusk.weather-clear    { background: linear-gradient(175deg, #120c28 0%, #8c2848 40%, #e85020 100%); }
-body.time-dusk.weather-clouds   { background: linear-gradient(175deg, #2a1e28 0%, #5c3c48 50%, #7a5858 100%); }
+body.time-dusk.weather-clouds   { background: linear-gradient(175deg, #120c28 0%, #8c2848 40%, #e85020 100%); }
 body.time-dusk.weather-snow     { background: linear-gradient(175deg, #281828 0%, #6a4868 50%, #c09898 100%); }
 
 /* ===================== 밝은 배경일 때 — 어두운 텍스트 ===================== */
