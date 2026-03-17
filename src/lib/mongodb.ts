@@ -5,7 +5,7 @@ declare global {
   var _mongooseCache: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
 }
 
-const MONGODB_URL = process.env.MONGODB_URL!;
+const MONGODB_URL = (process.env.MONGODB_URL || process.env.MONGO_URL)!;
 
 let cached = global._mongooseCache ?? { conn: null, promise: null };
 global._mongooseCache = cached;
