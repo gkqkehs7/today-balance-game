@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const { id } = await params;
     const body = await req.json();
     await connectDB();
-    await Question.findByIdAndUpdate(id, body);
+    await Question.findByIdAndUpdate(id, { $set: body });
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: '서버 오류' }, { status: 500 });

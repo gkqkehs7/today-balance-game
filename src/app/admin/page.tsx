@@ -94,8 +94,8 @@ export default function AdminPage() {
         body: JSON.stringify(editFields),
       });
       if (!res.ok) { const d = await res.json(); alert(d.error); return; }
-      setQuestionList(prev => prev.map(q => q._id === id ? { ...q, ...editFields } : q));
       setEditingId(null);
+      await loadQuestions();
     } catch {
       alert('서버 오류');
     }
