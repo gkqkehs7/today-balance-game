@@ -22,29 +22,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
     let animFrameId: number | null = null;
     let sceneTime = 0;
     let stars: { x: number; y: number; r: number; twinkle: number; speed: number }[] | null = null;
-    let crescentCanvas: HTMLCanvasElement | null = null;
-
-    function getCrescentCanvas() {
-      if (crescentCanvas) return crescentCanvas;
-      const size = 100;
-      crescentCanvas = document.createElement('canvas');
-      crescentCanvas.width = size;
-      crescentCanvas.height = size;
-      const mCtx = crescentCanvas.getContext('2d')!;
-      const cx = size / 2, cy = size / 2;
-      mCtx.fillStyle = 'rgba(240,230,190,0.88)';
-      mCtx.shadowColor = 'rgba(230,215,160,0.7)';
-      mCtx.shadowBlur = 18;
-      mCtx.beginPath();
-      mCtx.arc(cx, cy, 20, 0, Math.PI * 2);
-      mCtx.fill();
-      mCtx.globalCompositeOperation = 'destination-out';
-      mCtx.fillStyle = 'rgba(0,0,0,1)';
-      mCtx.beginPath();
-      mCtx.arc(cx + 11, cy - 2, 17, 0, Math.PI * 2);
-      mCtx.fill();
-      return crescentCanvas;
-    }
 
     const currentTimePhase: TimePhase = timePhase;
 
@@ -121,11 +98,16 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
       }
 
       if (currentTimePhase === 'dusk') {
-        // 저녁 초승달 (오프스크린 캔버스로 투명하게 잘라냄)
+        // 저녁 초승달 (evenodd 규칙으로 깔끔하게)
         const mx = W * 0.2, my = H * 0.1;
-        const crescent = getCrescentCanvas();
         ctx!.save();
-        ctx!.drawImage(crescent, mx - 50, my - 50);
+        ctx!.fillStyle = 'rgba(240,230,190,0.88)';
+        ctx!.shadowColor = 'rgba(230,215,160,0.6)';
+        ctx!.shadowBlur = 16;
+        ctx!.beginPath();
+        ctx!.arc(mx, my, 20, 0, Math.PI * 2, false);
+        ctx!.arc(mx + 11, my - 2, 17, 0, Math.PI * 2, false);
+        ctx!.fill('evenodd');
         ctx!.restore();
       }
 
