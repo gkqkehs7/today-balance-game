@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { IQuestion } from '@/types';
 import WeatherCanvas from '@/components/WeatherCanvas';
 import WeatherInfo from '@/components/WeatherInfo';
