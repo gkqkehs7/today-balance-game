@@ -70,6 +70,9 @@ export function useWeather(): UseWeatherReturn {
 
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${SEOUL_LAT}&lon=${SEOUL_LON}&appid=${apiKey}&units=metric`;
 
+    // API 응답 전 기본 배경 즉시 적용
+    applyBodyClasses('clear', phase);
+
     fetch(url)
       .then(r => r.json())
       .then(data => {
