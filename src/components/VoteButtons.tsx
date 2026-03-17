@@ -8,6 +8,10 @@ interface VoteButtonsProps {
   voteState: VoteState;
   pendingChoice: VoteChoice | null;
   myChoice: VoteChoice | null;
+  percentA?: number;
+  percentB?: number;
+  countA?: number;
+  countB?: number;
   onSelect: (choice: VoteChoice) => void;
   onConfirm: () => void;
 }
@@ -18,6 +22,10 @@ export default function VoteButtons({
   voteState,
   pendingChoice,
   myChoice,
+  percentA,
+  percentB,
+  countA,
+  countB,
   onSelect,
   onConfirm,
 }: VoteButtonsProps) {
@@ -62,7 +70,8 @@ export default function VoteButtons({
           </button>
           {voteState === 'confirmed' && (
             <div className="result-chip chip-a">
-              {myChoice === 'A' ? '내 선택' : ''}
+              {myChoice === 'A' && <span className="my-team-badge team-a">내 선택</span>}
+              {percentA !== undefined && <span className="result-stat stat-a">{percentA}% · {countA?.toLocaleString()}표</span>}
             </div>
           )}
         </div>
@@ -79,7 +88,8 @@ export default function VoteButtons({
           </button>
           {voteState === 'confirmed' && (
             <div className="result-chip chip-b">
-              {myChoice === 'B' ? '내 선택' : ''}
+              {myChoice === 'B' && <span className="my-team-badge team-b">내 선택</span>}
+              {percentB !== undefined && <span className="result-stat stat-b">{percentB}% · {countB?.toLocaleString()}표</span>}
             </div>
           )}
         </div>

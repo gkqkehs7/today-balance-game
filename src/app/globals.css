@@ -509,35 +509,16 @@ body.theme-light .vote-loading-spinner {
 }
 
 /* 결과 스플릿 바 */
-.result-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
+.result-stat {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
 }
-.result-label-a, .result-label-b {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.result-label-b {
-  align-items: flex-end;
-}
-.result-percent-a {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: rgba(100,160,255,0.95);
-}
-.result-percent-b {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: rgba(255,100,100,0.95);
-}
-.result-count-a, .result-count-b {
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.55);
-}
-body.theme-light .result-count-a,
-body.theme-light .result-count-b { color: rgba(18,24,38,0.5); }
+.stat-a { color: rgba(100,160,255,0.9); }
+.stat-b { color: rgba(255,100,100,0.9); }
+body.theme-light .stat-a { color: rgba(40,100,220,0.85); }
+body.theme-light .stat-b { color: rgba(200,50,50,0.85); }
 
 .result-split-bar {
   display: flex;

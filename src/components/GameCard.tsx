@@ -125,6 +125,10 @@ export default function GameCard({ initialQuestion }: GameCardProps) {
           voteState={voteState}
           pendingChoice={pendingChoice}
           myChoice={myChoice}
+          percentA={voteResult?.percentA}
+          percentB={voteResult?.percentB}
+          countA={voteResult?.countA}
+          countB={voteResult?.countB}
           onSelect={selectChoice}
           onConfirm={confirmVote}
         />
