@@ -21,11 +21,27 @@ export default function AdminPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editFields, setEditFields] = useState({ question: '', optionA: '', optionB: '', date: '' });
 
-  function handleLogin() {
+  const [loginMsg, setLoginMsg] = useState('');
+
+  async function handleLogin() {
     const secret = secretInput.trim();
     if (!secret) return;
-    setAdminSecret(secret);
-    setIsAuthed(true);
+    setLoginMsg('확인 중...');
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'x-admin-secret': secret },
+      });
+      if (!res.ok) {
+        setLoginMsg('❌ 비밀번호가 틀렸습니다.');
+        return;
+      }
+      setAdminSecret(secret);
+      setIsAuthed(true);
+      setLoginMsg('');
+    } catch {
+      setLoginMsg('❌ 서버 오류');
+    }
   }
 
   async function handleAddQuestion() {
@@ -130,6 +146,7 @@ export default function AdminPage() {
               style={inputStyle}
             />
             <button onClick={handleLogin} style={btnStyle}>인증</button>
+            {loginMsg && <p style={{ margin: 0, fontSize: '0.9rem', color: loginMsg.startsWith('❌') ? '#f87171' : '#94a3b8' }}>{loginMsg}</p>}
           </div>
         ) : (
           <div>
