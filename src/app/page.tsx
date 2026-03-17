@@ -3,15 +3,18 @@ import WeatherCanvas from '@/components/WeatherCanvas';
 import WeatherInfo from '@/components/WeatherInfo';
 import GameCard from '@/components/GameCard';
 import VoteCountdown from '@/components/VoteCountdown';
+import { connectDB } from '@/lib/mongodb';
+import Question from '@/models/Question';
 
 async function getTodayQuestion(): Promise<IQuestion | null> {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3000'}/api/questions/today`,
-      { cache: 'no-store' }
-    );
-    if (!res.ok) return null;
-    return await res.json();
+    await connectDB();
+    const today = new Date().toISOString().slice(0, 10);
+    let question = await Question.findOne({ date: today }).lean();
+    if (!question) {
+      question = await Question.findOne({ date: { $lte: today } }).sort({ date: -1 }).lean();
+    }
+    return question as IQuestion | null;
   } catch {
     return null;
   }
