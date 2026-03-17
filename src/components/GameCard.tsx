@@ -131,8 +131,12 @@ export default function GameCard({ initialQuestion }: GameCardProps) {
 
         {voteState === 'confirmed' && voteResult && (
           <ResultBar
+            optionA={question.optionA}
+            optionB={question.optionB}
             percentA={voteResult.percentA}
             percentB={voteResult.percentB}
+            countA={voteResult.countA}
+            countB={voteResult.countB}
             total={voteResult.total}
           />
         )}

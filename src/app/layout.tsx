@@ -21,6 +21,13 @@ export const metadata: Metadata = {
   description: '지금 사람들은 어느 쪽일까요?',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 function getInitialTheme(): string {
   const h = new Date().getHours() + new Date().getMinutes() / 60;
   // daytime (6:30~18:30) + clear = light background
