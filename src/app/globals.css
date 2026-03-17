@@ -497,6 +497,32 @@ body.theme-light .result-split-bar { background: rgba(0,0,0,0.08); }
 /* ===================== 댓글 섹션 ===================== */
 .comment-section { width: 100%; }
 
+.load-more-replies-btn {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.load-more-replies-btn:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.8);
+  border-color: rgba(255,255,255,0.3);
+}
+body.theme-light .load-more-replies-btn {
+  border-color: rgba(0,0,0,0.12);
+  color: rgba(0,0,0,0.45);
+}
+body.theme-light .load-more-replies-btn:hover {
+  background: rgba(0,0,0,0.04);
+  color: rgba(0,0,0,0.7);
+}
+
 .load-more-btn {
   width: 100%;
   margin-top: 12px;

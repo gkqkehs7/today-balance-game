@@ -27,6 +27,7 @@ export default function CommentItem({
 }: CommentItemProps) {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyText, setReplyText] = useState('');
+  const [visibleReplies, setVisibleReplies] = useState(3);
 
   const optionLabel = comment.choice === 'A' ? optionA : optionB;
 
@@ -90,7 +91,7 @@ export default function CommentItem({
 
       {comment.replies && comment.replies.length > 0 && (
         <div className="replies">
-          {comment.replies.map(reply => {
+          {comment.replies.slice(0, visibleReplies).map(reply => {
             const replyLabel = reply.choice === 'A' ? optionA : optionB;
             return (
               <div key={reply._id} className="reply-item">
@@ -102,6 +103,14 @@ export default function CommentItem({
               </div>
             );
           })}
+          {visibleReplies < comment.replies.length && (
+            <button
+              className="load-more-replies-btn"
+              onClick={() => setVisibleReplies(v => v + 3)}
+            >
+              대댓글 더보기 ({comment.replies.length - visibleReplies}개 남음)
+            </button>
+          )}
         </div>
       )}
 
