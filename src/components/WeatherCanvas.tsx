@@ -52,15 +52,6 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
       ctx!.fill();
     }
 
-    function getBodyDarkColor(): string {
-      if (currentTimePhase === 'night') {
-        const bg = getComputedStyle(document.body).background;
-        if (bg.includes('06101e')) return '6,16,30';
-        return '10,18,32';
-      }
-      return '10,18,32';
-    }
-
     function drawNightOverlay() {
       if (currentTimePhase !== 'night' && currentTimePhase !== 'dusk' && currentTimePhase !== 'dawn') return;
       const W = canvas!.width, H = canvas!.height;
@@ -87,54 +78,49 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         ctx!.beginPath();
         ctx!.arc(mx, my, 28, 0, Math.PI * 2);
         ctx!.fill();
-        ctx!.fillStyle = `rgba(${getBodyDarkColor()},0.82)`;
-        ctx!.shadowBlur = 0;
-        ctx!.beginPath();
-        ctx!.arc(mx + 10, my, 26, 0, Math.PI * 2);
-        ctx!.fill();
         ctx!.restore();
 
         drawGlow(mx, my, 120, 'rgba(200,200,160,__A__)', 0.06);
       }
 
       if (currentTimePhase === 'dusk') {
+        // 저녁 달 — 단순 동그란 달
         const mx = W * 0.2, my = H * 0.1;
         ctx!.save();
-        ctx!.fillStyle = 'rgba(240,235,210,0.85)';
+        ctx!.fillStyle = 'rgba(240,235,210,0.88)';
         ctx!.shadowColor = 'rgba(220,215,180,0.5)';
-        ctx!.shadowBlur = 24;
+        ctx!.shadowBlur = 30;
         ctx!.beginPath();
-        ctx!.arc(mx, my, 22, 0, Math.PI * 2);
+        ctx!.arc(mx, my, 28, 0, Math.PI * 2);
         ctx!.fill();
         ctx!.restore();
+        drawGlow(mx, my, 120, 'rgba(200,200,160,__A__)', 0.06);
       }
 
       if (currentTimePhase === 'dawn' || currentTimePhase === 'dusk') {
         const isDawn = currentTimePhase === 'dawn';
         const hx = isDawn ? W * 0.25 : W * 0.75;
-        const horizonY = H * 0.78;
-        const sunR = Math.min(W, H) * 0.07;
+        const groundY = H * 0.80;
+        const sunR = Math.min(W, H) * 0.065;
 
-        // 지는/뜨는 태양 (지평선에 걸친 반원)
-        const sunColor = isDawn ? 'rgba(255,200,80,0.92)' : 'rgba(255,110,30,0.92)';
-        const glowColor = isDawn ? '#ffcc44' : '#ff5500';
+        // 지는/뜨는 태양 — 지평선에 반만 걸쳐 있음
         ctx!.save();
         ctx!.beginPath();
-        ctx!.rect(0, 0, W, horizonY); // 지평선 위만 클리핑
+        ctx!.rect(0, 0, W, groundY);
         ctx!.clip();
-        ctx!.shadowColor = glowColor;
+        ctx!.shadowColor = isDawn ? '#ffcc44' : '#ff5500';
         ctx!.shadowBlur = 50;
-        ctx!.fillStyle = sunColor;
+        ctx!.fillStyle = isDawn ? 'rgba(255,200,80,0.92)' : 'rgba(255,110,30,0.92)';
         ctx!.beginPath();
-        ctx!.arc(hx, horizonY, sunR, 0, Math.PI * 2);
+        ctx!.arc(hx, groundY, sunR, 0, Math.PI * 2);
         ctx!.fill();
         ctx!.restore();
 
-        // 수평선 빛 번짐
+        // 노을빛 — 화면 바닥에서 위로 번짐
         const c1 = isDawn ? 'rgba(255,160,80,__A__)' : 'rgba(255,80,40,__A__)';
         const c2 = isDawn ? 'rgba(200,100,160,__A__)' : 'rgba(160,40,100,__A__)';
-        drawGlow(hx, horizonY, W * 0.6, c1, 0.22);
-        drawGlow(hx, horizonY, W * 0.3, c2, 0.14);
+        drawGlow(hx, H, W * 0.7, c1, 0.28);
+        drawGlow(hx, H, W * 0.4, c2, 0.18);
       }
     }
 
@@ -590,28 +576,30 @@ export default function WeatherCanvas({ children }: { children?: React.ReactNode
         sceneTime++;
         const t = sceneTime * 0.008;
 
-        const sx = W * 0.82, sy = H * 0.08;
-        drawGlow(sx, sy, W * 0.5, 'rgba(255,240,150,__A__)', 0.14);
-        drawGlow(sx, sy, 80, 'rgba(255,255,200,__A__)', 0.55);
+        if (currentTimePhase === 'day') {
+          const sx = W * 0.82, sy = H * 0.08;
+          drawGlow(sx, sy, W * 0.5, 'rgba(255,240,150,__A__)', 0.14);
+          drawGlow(sx, sy, 80, 'rgba(255,255,200,__A__)', 0.55);
 
-        ctx!.save();
-        ctx!.fillStyle = 'rgba(255,248,180,0.85)';
-        ctx!.beginPath();
-        ctx!.arc(sx, sy, 36, 0, Math.PI * 2);
-        ctx!.fill();
-        ctx!.restore();
-
-        ctx!.save();
-        ctx!.strokeStyle = 'rgba(255,240,120,0.25)';
-        ctx!.lineWidth = 2;
-        for (let i = 0; i < 12; i++) {
-          const a = (i / 12) * Math.PI * 2 + t;
+          ctx!.save();
+          ctx!.fillStyle = 'rgba(255,248,180,0.85)';
           ctx!.beginPath();
-          ctx!.moveTo(sx + Math.cos(a) * 42, sy + Math.sin(a) * 42);
-          ctx!.lineTo(sx + Math.cos(a) * 80, sy + Math.sin(a) * 80);
-          ctx!.stroke();
+          ctx!.arc(sx, sy, 36, 0, Math.PI * 2);
+          ctx!.fill();
+          ctx!.restore();
+
+          ctx!.save();
+          ctx!.strokeStyle = 'rgba(255,240,120,0.25)';
+          ctx!.lineWidth = 2;
+          for (let i = 0; i < 12; i++) {
+            const a = (i / 12) * Math.PI * 2 + t;
+            ctx!.beginPath();
+            ctx!.moveTo(sx + Math.cos(a) * 42, sy + Math.sin(a) * 42);
+            ctx!.lineTo(sx + Math.cos(a) * 80, sy + Math.sin(a) * 80);
+            ctx!.stroke();
+          }
+          ctx!.restore();
         }
-        ctx!.restore();
 
         drawSoftCloud(W * 0.2, H * 0.12, 60, 0.12, t * 0.3);
         drawSoftCloud(W * 0.6, H * 0.07, 80, 0.1, t * 0.2);
