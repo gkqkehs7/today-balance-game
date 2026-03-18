@@ -139,9 +139,9 @@ export default function CommentItem({
 
   return (
     <div className={`comment-item${pinned ? ' comment-pinned' : ''}`}>
-      {pinned && <span className="pin-badge"><span>🔥</span><span>hot</span></span>}
       <div className="comment-header">
         <span className={`choice-badge ${comment.choice}`}>{optionLabel}</span>
+        {pinned && <span className="pin-badge"><span>🔥</span><span>hot</span></span>}
         <span className="comment-time">{formatTime(comment.createdAt)}</span>
       </div>
       <p className="comment-text">{comment.text}</p>

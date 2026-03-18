@@ -844,7 +844,6 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 
 /* 댓글 아이템 */
 .comment-item {
-  position: relative;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: 14px;
@@ -856,7 +855,6 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 .comment-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   margin-bottom: 7px;
 }
@@ -880,11 +878,9 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 }
 
 .comment-time {
-  position: absolute;
-  top: 12px;
-  right: 14px;
   font-size: 0.72rem;
   opacity: 0.45;
+  margin-left: auto;
   letter-spacing: 0.02em;
 }
 
@@ -898,17 +894,16 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 .comment-pinned {
   border-color: rgba(255,210,60,0.35) !important;
   background: rgba(255,210,60,0.06) !important;
-  padding-top: 6px !important;
 }
 .pin-badge {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 0px;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   color: rgba(255,180,40,0.95);
-  margin-bottom: 8px;
+  margin-left: -4px;
 }
 body.theme-light .pin-badge { color: rgba(180,110,0,0.9); }
 body.theme-light .comment-pinned {
