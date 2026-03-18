@@ -32,6 +32,7 @@ export default function CommentSection({
   const [comments, setComments] = useState<IComment[]>(initialComments ?? []);
   const [commentText, setCommentText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [visibleCount, setVisibleCount] = useState(10);
 
   async function loadComments() {
@@ -49,6 +50,12 @@ export default function CommentSection({
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function refreshComments() {
+    setIsRefreshing(true);
+    await loadComments();
+    setIsRefreshing(false);
   }
 
   useEffect(() => {
@@ -116,6 +123,12 @@ export default function CommentSection({
     <div className="comment-section">
       <h2 className="comment-title">
         댓글 <span className="comment-count">{totalCount > 0 ? totalCount : ''}</span>
+        <button className={`comment-refresh-btn${isRefreshing ? ' refreshing' : ''}`} onClick={refreshComments} disabled={isRefreshing}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M23 4v6h-6"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </button>
       </h2>
 
       <div className="comment-input-wrap">

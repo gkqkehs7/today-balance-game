@@ -727,9 +727,25 @@ body.theme-light .load-more-btn:hover {
   margin-bottom: 14px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   text-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
+.comment-refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.6;
+  padding: 2px;
+  border-radius: 50%;
+  transition: opacity 0.2s;
+}
+.comment-refresh-btn:hover { opacity: 1; }
+.comment-refresh-btn.refreshing svg { animation: spin 0.6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .comment-count {
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 0.85rem;
