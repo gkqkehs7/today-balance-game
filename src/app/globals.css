@@ -1419,6 +1419,14 @@ body.theme-light .loading-text { color: rgba(18,24,38,0.7); text-shadow: none; }
 .archive-card-wrap {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.archive-card-wrap:hover {
+  transform: scale(1.01);
+}
+.archive-card-wrap:hover .card {
+  background: rgba(255,255,255,0.14);
 }
 
 .archive-crown {

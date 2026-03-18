@@ -12,6 +12,7 @@ interface CommentItemProps {
   optionB: string;
   isMock: boolean;
   pinned?: boolean;
+  readOnly?: boolean;
   onReply: () => void;
   formatTime: (iso: string) => string;
 }
@@ -24,6 +25,7 @@ export default function CommentItem({
   optionB,
   isMock,
   pinned,
+  readOnly = false,
   onReply,
   formatTime,
 }: CommentItemProps) {
@@ -168,39 +170,41 @@ export default function CommentItem({
         </div>
       )}
 
-      <div className="comment-actions">
-        <div className="reaction-btns">
-          <button
-            className={`reaction-btn${myReaction === 'like' ? ' active-like' : ''}`}
-            onClick={() => handleReaction('like')}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill={myReaction === 'like' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
-              <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+      {!readOnly && (
+        <div className="comment-actions">
+          <div className="reaction-btns">
+            <button
+              className={`reaction-btn${myReaction === 'like' ? ' active-like' : ''}`}
+              onClick={() => handleReaction('like')}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill={myReaction === 'like' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
+                <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+              </svg>
+              <span>{likes > 0 ? likes : ''}</span>
+            </button>
+            <button
+              className={`reaction-btn${myReaction === 'dislike' ? ' active-dislike' : ''}`}
+              onClick={() => handleReaction('dislike')}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill={myReaction === 'dislike' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/>
+                <path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/>
+              </svg>
+              <span>{dislikes > 0 ? dislikes : ''}</span>
+            </button>
+          </div>
+          <button className="reply-btn" onClick={toggleReply}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 17 4 12 9 7"/>
+              <path d="M20 18v-2a4 4 0 0 0-4-4H4"/>
             </svg>
-            <span>{likes > 0 ? likes : ''}</span>
-          </button>
-          <button
-            className={`reaction-btn${myReaction === 'dislike' ? ' active-dislike' : ''}`}
-            onClick={() => handleReaction('dislike')}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill={myReaction === 'dislike' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/>
-              <path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/>
-            </svg>
-            <span>{dislikes > 0 ? dislikes : ''}</span>
+            {showReplyInput ? '취소' : '답글'}
           </button>
         </div>
-        <button className="reply-btn" onClick={toggleReply}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="9 17 4 12 9 7"/>
-            <path d="M20 18v-2a4 4 0 0 0-4-4H4"/>
-          </svg>
-          {showReplyInput ? '취소' : '답글'}
-        </button>
-      </div>
+      )}
 
-      {showReplyInput && (
+      {!readOnly && showReplyInput && (
         <div className="reply-input-wrap">
           <span className={replyBadgeClass}>{replyBadgeText}</span>
           <input

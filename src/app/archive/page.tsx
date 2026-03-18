@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { MOCK_ARCHIVE, ArchiveMockItem } from '@/mocks';
 import ResultBar from '@/components/ResultBar';
 import WeatherCanvas from '@/components/WeatherCanvas';
@@ -28,10 +29,11 @@ type ArchiveItem = ArchiveQuestion | ArchiveMockItem;
 const LIMIT = 8;
 
 function ArchiveCard({ item }: { item: ArchiveItem }) {
+  const router = useRouter();
   const winnerA = item.votes.percentA >= item.votes.percentB;
 
   return (
-    <div className="archive-card-wrap">
+    <div className="archive-card-wrap" onClick={() => router.push(`/archive/${item._id}`)}>
       <div className="card" style={{ marginTop: 0 }}>
         <div className="question-area">
           <p className="archive-date-label">{item.date}</p>

@@ -11,6 +11,7 @@ interface CommentSectionProps {
   optionA: string;
   optionB: string;
   isMock: boolean;
+  readOnly?: boolean;
   initialComments?: IComment[];
 }
 
@@ -29,6 +30,7 @@ export default function CommentSection({
   optionA,
   optionB,
   isMock,
+  readOnly = false,
 }: CommentSectionProps) {
   const [hotComment, setHotComment] = useState<IComment | null>(null);
   const [comments, setComments] = useState<IComment[]>([]);
@@ -214,18 +216,20 @@ export default function CommentSection({
         </button>
       </h2>
 
-      <div className="comment-input-wrap">
-        <span className={badgeClass}>{badgeText}</span>
-        <input
-          type="text"
-          placeholder="의견을 남겨보세요 (최대 100자)"
-          maxLength={100}
-          value={commentText}
-          onChange={e => setCommentText(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter') submitComment(); }}
-        />
-        <button onClick={submitComment}>등록</button>
-      </div>
+      {!readOnly && (
+        <div className="comment-input-wrap">
+          <span className={badgeClass}>{badgeText}</span>
+          <input
+            type="text"
+            placeholder="의견을 남겨보세요 (최대 100자)"
+            maxLength={100}
+            value={commentText}
+            onChange={e => setCommentText(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') submitComment(); }}
+          />
+          <button onClick={submitComment}>등록</button>
+        </div>
+      )}
 
       <div>
         {isLoading ? (
@@ -255,6 +259,7 @@ export default function CommentSection({
                 optionB={optionB}
                 isMock={isMock}
                 pinned={true}
+                readOnly={readOnly}
                 onReply={refreshComments}
                 formatTime={formatTime}
               />
@@ -269,6 +274,7 @@ export default function CommentSection({
                 optionB={optionB}
                 isMock={isMock}
                 pinned={false}
+                readOnly={readOnly}
                 onReply={refreshComments}
                 formatTime={formatTime}
               />
