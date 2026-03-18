@@ -1,0 +1,198 @@
+export interface ArchiveMockItem {
+  _id: string;
+  question: string;
+  optionA: string;
+  optionB: string;
+  tag: string;
+  date: string;
+  votes: {
+    countA: number;
+    countB: number;
+    total: number;
+    percentA: number;
+    percentB: number;
+  };
+}
+
+export const MOCK_ARCHIVE: ArchiveMockItem[] = [
+  {
+    _id: 'archive001',
+    question: '연봉 5천 워라밸 직장 vs 연봉 1억 야근 필수 직장',
+    optionA: '워라밸 5천',
+    optionB: '야근 1억',
+    tag: '직장',
+    date: '2026-03-17',
+    votes: { countA: 1284, countB: 876, total: 2160, percentA: 59, percentB: 41 },
+  },
+  {
+    _id: 'archive002',
+    question: '평생 라면만 먹지만 돈 걱정 없는 삶 vs 맛있는 음식 다 먹지만 항상 돈 걱정',
+    optionA: '라면 부자',
+    optionB: '맛집 가난',
+    tag: '음식',
+    date: '2026-03-16',
+    votes: { countA: 543, countB: 1102, total: 1645, percentA: 33, percentB: 67 },
+  },
+  {
+    _id: 'archive003',
+    question: '친구가 없지만 연인이 있는 삶 vs 연인이 없지만 친구가 많은 삶',
+    optionA: '연인 O 친구 X',
+    optionB: '연인 X 친구 O',
+    tag: '관계',
+    date: '2026-03-15',
+    votes: { countA: 872, countB: 964, total: 1836, percentA: 47, percentB: 53 },
+  },
+  {
+    _id: 'archive004',
+    question: '기억력이 없어서 매일이 새로운 삶 vs 모든 것을 기억해서 잊고 싶어도 못 잊는 삶',
+    optionA: '기억력 없음',
+    optionB: '완전 기억',
+    tag: '일상',
+    date: '2026-03-14',
+    votes: { countA: 1560, countB: 340, total: 1900, percentA: 82, percentB: 18 },
+  },
+  {
+    _id: 'archive005',
+    question: '내가 싫어하는 사람이 성공하는 걸 보는 것 vs 내가 좋아하는 사람이 나보다 훨씬 잘 되는 것',
+    optionA: '싫은 사람 성공',
+    optionB: '친한 친구 대성공',
+    tag: '관계',
+    date: '2026-03-13',
+    votes: { countA: 710, countB: 1230, total: 1940, percentA: 37, percentB: 63 },
+  },
+  {
+    _id: 'archive006',
+    question: '평생 비행기 이코노미만 탈 수 있는 것 vs 평생 KTX만 탈 수 있는 것 (해외여행 불가)',
+    optionA: '이코노미 비행기',
+    optionB: 'KTX만 가능',
+    tag: '여행',
+    date: '2026-03-12',
+    votes: { countA: 1820, countB: 280, total: 2100, percentA: 87, percentB: 13 },
+  },
+  {
+    _id: 'archive007',
+    question: '모든 사람이 내 생각을 읽을 수 있는 것 vs 내가 모든 사람의 생각을 읽을 수 있는 것',
+    optionA: '내 생각 공개',
+    optionB: '모든 생각 열람',
+    tag: '능력',
+    date: '2026-03-11',
+    votes: { countA: 322, countB: 1578, total: 1900, percentA: 17, percentB: 83 },
+  },
+  {
+    _id: 'archive008',
+    question: '10년 후로 순간이동 vs 10년 전으로 순간이동 (현재 기억 유지)',
+    optionA: '10년 후',
+    optionB: '10년 전',
+    tag: '상상',
+    date: '2026-03-10',
+    votes: { countA: 648, countB: 1752, total: 2400, percentA: 27, percentB: 73 },
+  },
+  {
+    _id: 'archive009',
+    question: '평생 매일 똑같은 옷만 입어야 하는 것 vs 평생 매일 똑같은 음식만 먹어야 하는 것',
+    optionA: '같은 옷',
+    optionB: '같은 음식',
+    tag: '일상',
+    date: '2026-03-09',
+    votes: { countA: 1340, countB: 660, total: 2000, percentA: 67, percentB: 33 },
+  },
+  {
+    _id: 'archive010',
+    question: '말을 너무 많이 해서 항상 실수하는 사람 vs 말을 너무 안 해서 답답한 사람',
+    optionA: '말 많은 사람',
+    optionB: '말 없는 사람',
+    tag: '관계',
+    date: '2026-03-08',
+    votes: { countA: 920, countB: 1080, total: 2000, percentA: 46, percentB: 54 },
+  },
+  {
+    _id: 'archive011',
+    question: '평생 대중교통만 이용 vs 평생 걸어다니기만 가능',
+    optionA: '대중교통',
+    optionB: '도보',
+    tag: '일상',
+    date: '2026-03-07',
+    votes: { countA: 1890, countB: 210, total: 2100, percentA: 90, percentB: 10 },
+  },
+  {
+    _id: 'archive012',
+    question: '좋아하는 일 하면서 월 200만원 vs 싫어하는 일 하면서 월 800만원',
+    optionA: '좋아하는 일 200',
+    optionB: '싫어하는 일 800',
+    tag: '직장',
+    date: '2026-03-06',
+    votes: { countA: 1100, countB: 900, total: 2000, percentA: 55, percentB: 45 },
+  },
+  {
+    _id: 'archive013',
+    question: '잠을 3시간만 자도 되는 몸 vs 밥을 하루 한 끼만 먹어도 되는 몸',
+    optionA: '수면 3시간',
+    optionB: '식사 1끼',
+    tag: '능력',
+    date: '2026-03-05',
+    votes: { countA: 1450, countB: 550, total: 2000, percentA: 73, percentB: 27 },
+  },
+  {
+    _id: 'archive014',
+    question: '친한 친구가 나보다 훨씬 잘생겨지는 것 vs 친한 친구가 나보다 훨씬 부자가 되는 것',
+    optionA: '친구가 더 잘생김',
+    optionB: '친구가 더 부자',
+    tag: '관계',
+    date: '2026-03-04',
+    votes: { countA: 760, countB: 1240, total: 2000, percentA: 38, percentB: 62 },
+  },
+  {
+    _id: 'archive015',
+    question: '평생 더운 나라에서만 살기 vs 평생 추운 나라에서만 살기',
+    optionA: '더운 나라',
+    optionB: '추운 나라',
+    tag: '여행',
+    date: '2026-03-03',
+    votes: { countA: 880, countB: 1120, total: 2000, percentA: 44, percentB: 56 },
+  },
+  {
+    _id: 'archive016',
+    question: '모든 사람에게 인기가 많지만 진짜 친한 친구가 없는 삶 vs 인기는 없지만 나를 진심으로 아끼는 친구 3명',
+    optionA: '인기 많음',
+    optionB: '진친 3명',
+    tag: '관계',
+    date: '2026-03-02',
+    votes: { countA: 340, countB: 1660, total: 2000, percentA: 17, percentB: 83 },
+  },
+  {
+    _id: 'archive017',
+    question: '평생 스마트폰 없이 살기 vs 평생 자동차 없이 살기',
+    optionA: '스마트폰 없음',
+    optionB: '자동차 없음',
+    tag: '일상',
+    date: '2026-03-01',
+    votes: { countA: 420, countB: 1580, total: 2000, percentA: 21, percentB: 79 },
+  },
+  {
+    _id: 'archive018',
+    question: '내가 하는 말이 항상 반말로 들리는 것 vs 내가 하는 말이 항상 존댓말로 들리는 것',
+    optionA: '항상 반말',
+    optionB: '항상 존댓말',
+    tag: '일상',
+    date: '2026-02-28',
+    votes: { countA: 650, countB: 1350, total: 2000, percentA: 33, percentB: 67 },
+  },
+  {
+    _id: 'archive019',
+    question: '평생 아침 5시에 일어나는 삶 vs 평생 새벽 2시에 자는 삶',
+    optionA: '아침형 인간',
+    optionB: '올빼미형 인간',
+    tag: '일상',
+    date: '2026-02-27',
+    votes: { countA: 980, countB: 1020, total: 2000, percentA: 49, percentB: 51 },
+  },
+  {
+    _id: 'archive020',
+    question: '10억을 받지만 1년간 해외에서 혼자 살아야 하는 것 vs 1억을 받고 지금과 똑같이 사는 것',
+    optionA: '10억 + 1년 해외',
+    optionB: '1억 + 현재 유지',
+    tag: '상상',
+    date: '2026-02-26',
+    votes: { countA: 1680, countB: 320, total: 2000, percentA: 84, percentB: 16 },
+  },
+];
