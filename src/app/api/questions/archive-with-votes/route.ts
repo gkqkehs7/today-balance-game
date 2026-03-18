@@ -12,8 +12,8 @@ export async function GET(req: NextRequest) {
     const skip = (page - 1) * limit;
 
     const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
-    const total = await Question.countDocuments({ date: { $lte: today } });
-    const questions = await Question.find({ date: { $lte: today } })
+    const total = await Question.countDocuments({ date: { $lt: today } });
+    const questions = await Question.find({ date: { $lt: today } })
       .sort({ date: -1 })
       .skip(skip)
       .limit(limit)

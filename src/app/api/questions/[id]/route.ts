@@ -23,7 +23,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       _id: String(question._id),
       votes: { countA, countB, total, percentA, percentB },
     });
-  } catch {
+  } catch (err) {
+    console.error('[GET /api/questions/[id]]', err);
     return NextResponse.json({ error: '서버 오류' }, { status: 500 });
   }
 }
