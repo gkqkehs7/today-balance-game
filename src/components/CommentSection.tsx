@@ -221,7 +221,7 @@ export default function CommentSection({
           <span className={badgeClass}>{badgeText}</span>
           <input
             type="text"
-            placeholder="의견을 남겨보세요 (최대 100자)"
+            placeholder="의견을 남겨보세요"
             maxLength={100}
             value={commentText}
             onChange={e => setCommentText(e.target.value)}

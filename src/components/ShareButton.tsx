@@ -4,7 +4,7 @@ import { useState } from 'react';
 import confetti from 'canvas-confetti';
 
 function fireConfetti() {
-  const duration = 1200;
+  const duration = 300;
   const end = Date.now() + duration;
 
   const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b', '#cc5de8'];

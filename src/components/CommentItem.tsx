@@ -211,7 +211,7 @@ export default function CommentItem({
           <span className={replyBadgeClass}>{replyBadgeText}</span>
           <input
             type="text"
-            placeholder="대댓글 입력 (최대 100자)"
+            placeholder="대댓글 입력"
             maxLength={100}
             value={replyText}
             onChange={e => setReplyText(e.target.value)}

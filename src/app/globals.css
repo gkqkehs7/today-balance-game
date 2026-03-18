@@ -323,7 +323,9 @@ header h1 {
 .vs-divider {
   flex-shrink: 0;
   width: 44px;
-  padding-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 0.75rem;
   font-weight: 700;
