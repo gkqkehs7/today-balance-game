@@ -284,7 +284,7 @@ header h1 {
 /* ===================== 투표 버튼 ===================== */
 .vote-area {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 0;
 }
 
@@ -294,6 +294,10 @@ header h1 {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.vote-col .vote-btn {
+  flex: 1;
 }
 
 .vs-divider {
