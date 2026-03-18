@@ -924,6 +924,11 @@ body.theme-light .comment-pinned {
   gap: 4px;
 }
 
+.reaction-btn:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
 .reaction-btn {
   display: inline-flex;
   align-items: center;

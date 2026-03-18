@@ -176,7 +176,6 @@ export default function CommentItem({
             className={`reaction-btn${myReaction === 'like' ? ' active-like' : ''}`}
             onClick={readOnly ? undefined : () => handleReaction('like')}
             disabled={readOnly}
-            style={readOnly ? { cursor: 'default', pointerEvents: 'none' } : undefined}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill={myReaction === 'like' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/>
@@ -188,7 +187,6 @@ export default function CommentItem({
             className={`reaction-btn${myReaction === 'dislike' ? ' active-dislike' : ''}`}
             onClick={readOnly ? undefined : () => handleReaction('dislike')}
             disabled={readOnly}
-            style={readOnly ? { cursor: 'default', pointerEvents: 'none' } : undefined}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill={myReaction === 'dislike' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/>
