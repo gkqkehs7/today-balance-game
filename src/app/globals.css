@@ -75,8 +75,8 @@ body.theme-light .result-total { color: rgba(18,24,38,0.7); }
 body.theme-light .card        { background: rgba(255,255,255,0.38); border-color: rgba(255,255,255,0.6); }
 body.theme-light .ghost-btn   { border-color: rgba(0,0,0,0.22); background: rgba(0,0,0,0.07); color: rgba(18,24,38,0.78); }
 body.theme-light .ghost-btn:hover { background: rgba(0,0,0,0.13); border-color: rgba(0,0,0,0.35); }
-body.theme-light .share-btn   { border-color: rgba(0,0,0,0.22); background: rgba(0,0,0,0.07); color: rgba(18,24,38,0.78); }
-body.theme-light .share-btn:hover { background: rgba(0,0,0,0.13); }
+body.theme-light .share-btn   { color: rgba(18,24,38,0.78); }
+body.theme-light .share-btn:hover { background: transparent; }
 body.theme-light .comment-title { color: #121826; text-shadow: none; }
 body.theme-light .comment-count { color: rgba(18,24,38,0.7); }
 body.theme-light .comment-text  { color: rgba(18,24,38,0.9); }
@@ -581,27 +581,56 @@ body.theme-light .result-count-b { color: rgba(200,50,50,0.75); }
 }
 
 /* ===================== 공유 버튼 ===================== */
+.share-btn-outer {
+  display: inline-flex;
+  transition: transform 0.15s;
+}
+.share-btn-outer:hover {
+  transform: scale(1.03);
+}
+.share-btn-wrap {
+  position: relative;
+  display: inline-flex;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+}
+.share-btn-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  padding: 2px;
+  background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #cc5de8, #ff6b6b);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: rainbow-hue 4s linear infinite;
+}
+@keyframes rainbow-hue {
+  to { filter: hue-rotate(360deg); }
+}
+
 .share-btn {
+  -webkit-appearance: none;
+  appearance: none;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 11px 28px;
   border-radius: 999px;
-  border: 1.5px solid rgba(255,255,255,0.55);
-  background: rgba(255,255,255,0.16);
+  border: none;
+  background: transparent;
   color: #fff;
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.03em;
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
-.share-btn:hover {
-  background: rgba(255,255,255,0.28);
-  border-color: rgba(255,255,255,0.85);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255,255,255,0.12);
+.share-btn:hover, .share-btn:focus, .share-btn:active {
+  background: transparent;
+  outline: none;
 }
 
 /* ===================== 맨 위로 버튼 ===================== */

@@ -1,6 +1,32 @@
 'use client';
 
 import { useState } from 'react';
+import confetti from 'canvas-confetti';
+
+function fireConfetti() {
+  const duration = 2000;
+  const end = Date.now() + duration;
+
+  const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b', '#cc5de8'];
+
+  (function frame() {
+    confetti({
+      particleCount: 6,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0, y: 0.7 },
+      colors,
+    });
+    confetti({
+      particleCount: 6,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1, y: 0.7 },
+      colors,
+    });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
 
 export default function ShareButton() {
   const [copied, setCopied] = useState(false);
@@ -17,14 +43,17 @@ export default function ShareButton() {
       document.execCommand('copy');
       document.body.removeChild(textarea);
     }
+    fireConfetti();
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
 
   return (
+    <div className="share-btn-outer">
+    <div className="share-btn-wrap">
     <button className="share-btn" onClick={handleShare}>
       {copied ? (
-        '링크 복사됨!'
+        '링크 복사됨! 🎉'
       ) : (
         <>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -38,5 +67,7 @@ export default function ShareButton() {
         </>
       )}
     </button>
+    </div>
+    </div>
   );
 }
