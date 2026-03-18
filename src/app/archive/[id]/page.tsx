@@ -47,9 +47,12 @@ export default function ArchiveDetailPage() {
     }
 
     fetch(`/api/questions/${id}`)
-      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(r => {
+        console.log('[archive detail] API status:', r.status, 'id:', id);
+        return r.ok ? r.json() : r.json().then(e => Promise.reject(e));
+      })
       .then(d => { setData(d); setLoading(false); })
-      .catch(() => setLoading(false));
+      .catch(e => { console.error('[archive detail] API error:', e); setLoading(false); });
   }, [id]);
 
   const winnerA = (data?.votes.percentA ?? 50) >= (data?.votes.percentB ?? 50);

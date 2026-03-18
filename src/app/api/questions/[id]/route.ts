@@ -7,8 +7,10 @@ import Vote from '@/models/Vote';
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    console.log('[GET /api/questions/[id]] id:', id);
     await connectDB();
     const question = await Question.findById(id).lean();
+    console.log('[GET /api/questions/[id]] found:', !!question);
     if (!question) return NextResponse.json({ error: '질문 없음' }, { status: 404 });
 
     const votes = await Vote.find({ questionId: id }).lean();
