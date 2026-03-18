@@ -4,23 +4,23 @@ import { useState } from 'react';
 import confetti from 'canvas-confetti';
 
 function fireConfetti() {
-  const duration = 2000;
+  const duration = 1200;
   const end = Date.now() + duration;
 
   const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff922b', '#cc5de8'];
 
   (function frame() {
     confetti({
-      particleCount: 6,
+      particleCount: 2,
       angle: 60,
-      spread: 55,
+      spread: 45,
       origin: { x: 0, y: 0.7 },
       colors,
     });
     confetti({
-      particleCount: 6,
+      particleCount: 2,
       angle: 120,
-      spread: 55,
+      spread: 45,
       origin: { x: 1, y: 0.7 },
       colors,
     });
