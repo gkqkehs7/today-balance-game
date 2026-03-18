@@ -892,7 +892,7 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 
 /* 인기 댓글 핀 */
 .comment-pinned {
-  border-color: rgba(255,210,60,0.35) !important;
+  border-color: rgba(255,210,60,0.65) !important;
   background: rgba(255,210,60,0.06) !important;
 }
 .pin-badge {
@@ -907,7 +907,7 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 }
 body.theme-light .pin-badge { color: rgba(180,110,0,0.9); }
 body.theme-light .comment-pinned {
-  border-color: rgba(200,160,0,0.35) !important;
+  border-color: rgba(200,160,0,0.65) !important;
   background: rgba(255,220,0,0.06) !important;
 }
 
