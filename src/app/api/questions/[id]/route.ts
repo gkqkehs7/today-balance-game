@@ -12,7 +12,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     // findById auto-casts to ObjectId; fallback to raw string _id query
     let question = await Question.findById(id).lean();
     if (!question) {
-      const raw = await mongoose.connection.db!.collection('questions').findOne({ _id: id as unknown });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const raw = await mongoose.connection.db!.collection('questions').findOne({ _id: id as any });
       if (raw) question = raw as typeof question;
     }
     if (!question) return NextResponse.json({ error: '질문 없음' }, { status: 404 });
