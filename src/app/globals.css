@@ -855,9 +855,9 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 .comment-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   margin-bottom: 7px;
-  width: 100%;
 }
 
 .choice-badge {
@@ -881,7 +881,7 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 .comment-time {
   font-size: 0.72rem;
   opacity: 0.45;
-  margin-left: auto;
+  flex-shrink: 0;
   letter-spacing: 0.02em;
 }
 
