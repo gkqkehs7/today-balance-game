@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import { connectDB } from '@/lib/mongodb';
 import { checkAdminAuth } from '@/lib/adminAuth';
 import Question from '@/models/Question';
@@ -7,13 +8,17 @@ import Vote from '@/models/Vote';
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    console.log('[GET /api/questions/[id]] id:', id);
     await connectDB();
-    const question = await Question.findById(id).lean();
-    console.log('[GET /api/questions/[id]] found:', !!question);
+    // findById auto-casts to ObjectId; fallback to raw string _id query
+    let question = await Question.findById(id).lean();
+    if (!question) {
+      const raw = await mongoose.connection.db!.collection('questions').findOne({ _id: id as unknown });
+      if (raw) question = raw as typeof question;
+    }
     if (!question) return NextResponse.json({ error: '질문 없음' }, { status: 404 });
 
-    const votes = await Vote.find({ questionId: id }).lean();
+    const questionObjectId = question._id;
+    const votes = await Vote.find({ questionId: questionObjectId }).lean();
     const countA = votes.filter((v) => v.choice === 'A').length;
     const countB = votes.filter((v) => v.choice === 'B').length;
     const total = countA + countB;
