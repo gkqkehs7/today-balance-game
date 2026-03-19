@@ -17,9 +17,14 @@ interface CommentSectionProps {
 
 function formatTime(iso: string): string {
   if (!iso) return '';
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (diff < 60) return '방금 전';
+  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+  if (diff < 604800) return `${Math.floor(diff / 86400)}일 전`;
+  if (diff < 2592000) return `${Math.floor(diff / 604800)}주 전`;
+  if (diff < 31536000) return `${Math.floor(diff / 2592000)}달 전`;
+  return `${Math.floor(diff / 31536000)}년 전`;
 }
 
 const LIMIT = 10;
