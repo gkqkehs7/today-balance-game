@@ -17,8 +17,25 @@ const notoSerifKR = Noto_Serif_KR({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://today-bal.shop'),
   title: '오늘의 밸런스 게임',
-  description: '지금 사람들은 어느 쪽일까요?',
+  description: '매일 새로운 밸런스 게임! 지금 사람들은 어느 쪽일까요?',
+  keywords: ['밸런스 게임', '오늘의 밸런스 게임', '투표', '선택', '밸런스'],
+  openGraph: {
+    title: '오늘의 밸런스 게임',
+    description: '매일 새로운 밸런스 게임! 지금 사람들은 어느 쪽일까요?',
+    url: 'https://today-bal.shop',
+    siteName: '오늘의 밸런스 게임',
+    locale: 'ko_KR',
+    type: 'website',
+    images: [{ url: '/og-image.png', width: 2048, height: 2048 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '오늘의 밸런스 게임',
+    description: '매일 새로운 밸런스 게임! 지금 사람들은 어느 쪽일까요?',
+    images: ['/og-image.png'],
+  },
 };
 
 export const viewport = {
