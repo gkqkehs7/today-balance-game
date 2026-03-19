@@ -60,11 +60,9 @@ export default function ArchiveDetailPage() {
   return (
     <WeatherCanvas>
       <div className="container">
+        <a href="/archive" style={{ position: 'fixed', top: '20px', left: '20px', zIndex: 100, fontSize: '1.4rem', opacity: 0.7, textDecoration: 'none', color: 'inherit' }}>←</a>
         <header>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
-            <a href="/archive" style={{ fontSize: '1.1rem', opacity: 0.6, textDecoration: 'none', color: 'inherit' }}>←</a>
-            <h1>{data ? `${formatDate(data.date)}의 밸런스 게임` : '밸런스 게임'}</h1>
-          </div>
+          <h1>{data ? `${formatDate(data.date)}의 밸런스 게임` : '밸런스 게임'}</h1>
           <p className="subtitle" style={{ color: '#ff4d4d', fontWeight: 700, opacity: 1 }}>투표 종료</p>
         </header>
 
