@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: '오늘의 밸런스 게임',
     locale: 'ko_KR',
     type: 'website',
-    images: [{ url: '/og-image.png', width: 2048, height: 2048 }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
