@@ -146,16 +146,41 @@ export default function CommentItem({
   return (
     <div
       className={`comment-item${pinned ? ' comment-pinned' : ''}`}
-      style={pinned ? { position: 'relative', background: 'linear-gradient(135deg, #ff8c28, #dc4614)', border: 'none', overflow: 'visible' } : undefined}
+      style={pinned ? { position: 'relative', overflow: 'visible' } : undefined}
     >
       {pinned && (
-        <div style={{ position: 'absolute', top: '-30px', right: '-2px', display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
-          <span style={{ fontSize: '4.5rem' }}>🔥</span>
-        </div>
+        <>
+          <div style={{ position: 'absolute', top: '-30px', right: '-2px', display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1, zIndex: 2 }}>
+            <span className="hot-fire-big">🔥</span>
+          </div>
+          {[
+            { top: '0%',  left: '8%',  delay: '0s',    dur: '2.4s' },
+            { top: '0%',  left: '22%', delay: '0.6s',  dur: '2.0s' },
+            { top: '0%',  left: '40%', delay: '1.2s',  dur: '2.6s' },
+            { top: '0%',  left: '58%', delay: '0.3s',  dur: '2.1s' },
+            { top: '0%',  left: '74%', delay: '1.0s',  dur: '2.3s' },
+            { top: '0%',  left: '88%', delay: '1.8s',  dur: '1.9s' },
+            { top: '25%', left: '5%',  delay: '0.4s',  dur: '2.2s' },
+            { top: '25%', left: '30%', delay: '1.5s',  dur: '2.5s' },
+            { top: '25%', left: '50%', delay: '0.8s',  dur: '2.0s' },
+            { top: '25%', left: '68%', delay: '2.0s',  dur: '2.3s' },
+            { top: '25%', left: '85%', delay: '0.2s',  dur: '1.8s' },
+            { top: '50%', left: '12%', delay: '1.3s',  dur: '2.4s' },
+            { top: '50%', left: '35%', delay: '0.5s',  dur: '2.1s' },
+            { top: '50%', left: '55%', delay: '1.7s',  dur: '2.6s' },
+            { top: '50%', left: '78%', delay: '0.9s',  dur: '2.0s' },
+            { top: '75%', left: '18%', delay: '0.7s',  dur: '2.3s' },
+            { top: '75%', left: '45%', delay: '1.4s',  dur: '1.9s' },
+            { top: '75%', left: '65%', delay: '0.1s',  dur: '2.5s' },
+            { top: '75%', left: '90%', delay: '1.6s',  dur: '2.2s' },
+          ].map((s, i) => (
+            <span key={i} className="hot-spark" style={{ top: s.top, left: s.left, animationDelay: s.delay, animationDuration: s.dur }} />
+          ))}
+        </>
       )}
       <div className="comment-header">
         <span className={`choice-badge ${comment.choice}`}>{optionLabel}</span>
-        {isMine && <span className="pin-badge" style={{ background: pinned ? 'rgba(124,45,0,0.3)' : 'rgba(107,114,128,0.2)', color: pinned ? '#7c2d00' : '#6b7280', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>}
+        {isMine && <span className="pin-badge" style={{ background: pinned ? 'rgba(255,160,0,0.2)' : 'rgba(107,114,128,0.2)', color: pinned ? '#ffcc44' : '#9ca3af', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>}
         <span className="comment-time">{formatTime(comment.createdAt)}</span>
       </div>
       <p className="comment-text">{comment.text}</p>
@@ -168,7 +193,7 @@ export default function CommentItem({
                 <div className="comment-header">
                   <span className={`choice-badge ${reply.choice}`}>{reply.choice === 'A' ? optionA : optionB}</span>
                   {typeof window !== 'undefined' && localStorage.getItem(`my_comment_${reply._id}`) && (
-                    <span className="pin-badge" style={{ background: pinned ? 'rgba(124,45,0,0.3)' : 'rgba(107,114,128,0.2)', color: pinned ? '#7c2d00' : '#6b7280', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>
+                    <span className="pin-badge" style={{ background: pinned ? 'rgba(255,160,0,0.2)' : 'rgba(107,114,128,0.2)', color: pinned ? '#ffcc44' : '#9ca3af', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>
                   )}
                   <span className="comment-time">{formatTime(reply.createdAt)}</span>
                 </div>
