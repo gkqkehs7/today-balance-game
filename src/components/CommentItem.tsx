@@ -144,11 +144,18 @@ export default function CommentItem({
   const replyBadgeClass = `my-team-badge ${myChoice === 'A' ? 'team-a' : 'team-b'}`;
 
   return (
-    <div className={`comment-item${pinned ? ' comment-pinned' : ''}`}>
+    <div
+      className={`comment-item${pinned ? ' comment-pinned' : ''}`}
+      style={pinned ? { position: 'relative', background: 'linear-gradient(135deg, #ff8c28, #dc4614)', border: 'none', overflow: 'visible' } : undefined}
+    >
+      {pinned && (
+        <div style={{ position: 'absolute', top: '-30px', right: '-2px', display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
+          <span style={{ fontSize: '4.5rem' }}>🔥</span>
+        </div>
+      )}
       <div className="comment-header">
         <span className={`choice-badge ${comment.choice}`}>{optionLabel}</span>
-        {isMine && <span className="pin-badge" style={{ background: 'rgba(34,197,94,0.15)', color: '#16a34a', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>}
-        {pinned && <span className="pin-badge"><span>🔥</span><span>hot</span></span>}
+        {isMine && <span className="pin-badge" style={{ background: pinned ? 'rgba(124,45,0,0.3)' : 'rgba(107,114,128,0.2)', color: pinned ? '#7c2d00' : '#6b7280', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>}
         <span className="comment-time">{formatTime(comment.createdAt)}</span>
       </div>
       <p className="comment-text">{comment.text}</p>
@@ -161,7 +168,7 @@ export default function CommentItem({
                 <div className="comment-header">
                   <span className={`choice-badge ${reply.choice}`}>{reply.choice === 'A' ? optionA : optionB}</span>
                   {typeof window !== 'undefined' && localStorage.getItem(`my_comment_${reply._id}`) && (
-                    <span className="pin-badge" style={{ background: 'rgba(34,197,94,0.15)', color: '#16a34a', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>
+                    <span className="pin-badge" style={{ background: pinned ? 'rgba(124,45,0,0.3)' : 'rgba(107,114,128,0.2)', color: pinned ? '#7c2d00' : '#6b7280', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>
                   )}
                   <span className="comment-time">{formatTime(reply.createdAt)}</span>
                 </div>

@@ -894,23 +894,39 @@ body.theme-light .my-team-badge.team-b { background: rgba(220,60,60,0.12); color
 
 /* 인기 댓글 핀 */
 .comment-pinned {
-  border-color: rgba(255,210,60,0.8) !important;
-  background: rgba(255,210,60,0.14) !important;
+  box-shadow: 0 4px 20px rgba(255,100,0,0.25);
+}
+.comment-pinned .comment-text {
+  color: rgba(50,20,0,0.9);
+}
+.hot-badge-overlay {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  line-height: 1;
+}
+.hot-fire {
+  font-size: 2.2rem;
+}
+.hot-text {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: rgba(180,50,0,0.95);
+  letter-spacing: 0.05em;
 }
 .pin-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0px;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: rgba(255,180,40,0.95);
-  margin-left: -4px;
 }
-body.theme-light .pin-badge { color: rgba(180,110,0,0.9); }
 body.theme-light .comment-pinned {
-  border-color: rgba(200,160,0,0.8) !important;
-  background: rgba(255,220,0,0.14) !important;
+  box-shadow: 0 4px 20px rgba(255,100,0,0.2);
 }
 
 /* 댓글 하단 액션 영역 */

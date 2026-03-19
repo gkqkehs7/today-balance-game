@@ -318,4 +318,4 @@ export const MOCK_COMMENTS: IComment[] = [
   },
 ];
 
-export const MOCK_MY_COMMENT_IDS = ['c1', 'c38', 'c_mine1', 'r_mine1'];
+export const MOCK_MY_COMMENT_IDS = ['c1', 'c38', 'c_mine1', 'r_mine1', 'r21'];
