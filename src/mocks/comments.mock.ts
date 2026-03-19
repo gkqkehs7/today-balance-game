@@ -308,6 +308,14 @@ export const MOCK_COMMENTS: IComment[] = [
     text: '다들 고민 많으시겠지만 저는 그냥 복권 당첨되면 해결될 것 같아요 ㅋㅋ',
     likes: 18, dislikes: 0, createdAt: new Date(m(1)).toISOString(), replies: [
       { _id: 'r23', questionId: 'mock0001', parentId: 'c50', choice: 'A', text: '이게 정답이네요 ㅋㅋㅋ', likes: 0, dislikes: 0, createdAt: new Date(m(0)).toISOString(), replies: [] },
+      { _id: 'r_mine1', questionId: 'mock0001', parentId: 'c50', choice: 'B', text: '저도 복권 사러 갑니다 ㅋㅋ', likes: 0, dislikes: 0, createdAt: new Date(m(0)).toISOString(), replies: [] },
     ],
   },
+  {
+    _id: 'c_mine1', questionId: 'mock0001', parentId: null, choice: 'A',
+    text: '저는 A 선택했어요. 돈보다 사람이 중요하다고 생각해요.',
+    likes: 3, dislikes: 0, createdAt: new Date(m(0)).toISOString(), replies: [],
+  },
 ];
+
+export const MOCK_MY_COMMENT_IDS = ['c1', 'c38', 'c_mine1', 'r_mine1'];

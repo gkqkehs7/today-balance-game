@@ -35,10 +35,12 @@ export default function CommentItem({
   const [likes, setLikes] = useState(comment.likes ?? 0);
   const [dislikes, setDislikes] = useState(comment.dislikes ?? 0);
   const [myReaction, setMyReaction] = useState<'like' | 'dislike' | null>(null);
+  const [isMine, setIsMine] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(`reaction_${comment._id}`);
     if (stored === 'like' || stored === 'dislike') setMyReaction(stored);
+    setIsMine(!!localStorage.getItem(`my_comment_${comment._id}`));
   }, [comment._id]);
 
   const optionLabel = comment.choice === 'A' ? optionA : optionB;
@@ -97,7 +99,7 @@ export default function CommentItem({
     if (isMock) {
       const parent = MOCK_COMMENTS.find(c => c._id === comment._id);
       if (parent) {
-        parent.replies.push({
+        const newReply = {
           _id: `r${Date.now()}`,
           questionId,
           parentId: comment._id,
@@ -107,7 +109,9 @@ export default function CommentItem({
           dislikes: 0,
           createdAt: new Date().toISOString(),
           replies: [],
-        });
+        };
+        localStorage.setItem(`my_comment_${newReply._id}`, '1');
+        parent.replies.push(newReply);
       }
       setShowReplyInput(false);
       setReplyText('');
@@ -126,6 +130,8 @@ export default function CommentItem({
         alert(d.error);
         return;
       }
+      const created = await res.json();
+      if (created?._id) localStorage.setItem(`my_comment_${created._id}`, '1');
       setShowReplyInput(false);
       setReplyText('');
       onReply();
@@ -141,6 +147,7 @@ export default function CommentItem({
     <div className={`comment-item${pinned ? ' comment-pinned' : ''}`}>
       <div className="comment-header">
         <span className={`choice-badge ${comment.choice}`}>{optionLabel}</span>
+        {isMine && <span className="pin-badge" style={{ background: 'rgba(34,197,94,0.15)', color: '#16a34a', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>}
         {pinned && <span className="pin-badge"><span>🔥</span><span>hot</span></span>}
         <span className="comment-time">{formatTime(comment.createdAt)}</span>
       </div>
@@ -153,6 +160,9 @@ export default function CommentItem({
               <div key={reply._id} className="reply-item">
                 <div className="comment-header">
                   <span className={`choice-badge ${reply.choice}`}>{reply.choice === 'A' ? optionA : optionB}</span>
+                  {typeof window !== 'undefined' && localStorage.getItem(`my_comment_${reply._id}`) && (
+                    <span className="pin-badge" style={{ background: 'rgba(34,197,94,0.15)', color: '#16a34a', border: 'none', padding: '2px 7px', borderRadius: '6px' }}>내가 작성</span>
+                  )}
                   <span className="comment-time">{formatTime(reply.createdAt)}</span>
                 </div>
                 <p className="comment-text">{reply.text}</p>

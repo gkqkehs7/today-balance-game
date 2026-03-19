@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { IComment, VoteChoice } from '@/types';
 import { MOCK_COMMENTS } from '@/lib/mockData';
+import { MOCK_MY_COMMENT_IDS } from '@/mocks/comments.mock';
 import CommentItem from '@/components/CommentItem';
 
 interface CommentSectionProps {
@@ -140,6 +141,9 @@ export default function CommentSection({
 
   async function initialLoad() {
     setIsLoading(true);
+    if (isMock) {
+      MOCK_MY_COMMENT_IDS.forEach(id => localStorage.setItem(`my_comment_${id}`, '1'));
+    }
     await fetchBoth();
     setIsLoading(false);
   }
@@ -178,6 +182,7 @@ export default function CommentSection({
         createdAt: new Date().toISOString(),
         replies: [],
       };
+      localStorage.setItem(`my_comment_${newComment._id}`, '1');
       MOCK_COMMENTS.unshift(newComment);
       setCommentText('');
       await refreshComments();
@@ -195,6 +200,8 @@ export default function CommentSection({
         alert(d.error);
         return;
       }
+      const created = await res.json();
+      if (created?._id) localStorage.setItem(`my_comment_${created._id}`, '1');
       setCommentText('');
       await refreshComments();
     } catch {
